@@ -1,0 +1,105 @@
+{% extends 'core/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Eventos — Agendate Narino{% endblock %}
+
+{% block content_header %}
+{% include 'core/includes/content_header.html' with title='Eventos' breadcrumbs=content_breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+  <div class="card-header">
+    <div class="row align-items-center w-100">
+      <div class="col-md-6">
+        <form method="get" class="d-flex gap-2">
+          <input type="text" name="buscar" class="form-control" placeholder="Buscar evento..." value="{{ request.GET.buscar|default:'' }}">
+          <select name="estado" class="form-select" style="width: auto;">
+            <option value="">Todos los estados</option>
+            <option value="no_iniciado" {% if request.GET.estado == 'no_iniciado' %}selected{% endif %}>No Iniciado</option>
+            <option value="en_curso" {% if request.GET.estado == 'en_curso' %}selected{% endif %}>En Curso</option>
+            <option value="finalizado" {% if request.GET.estado == 'finalizado' %}selected{% endif %}>Finalizado</option>
+          </select>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+        </form>
+      </div>
+      <div class="col-md-6 text-end">
+        <a href="{% url 'eventos:evento_create' %}" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-1"></i>Nuevo Evento
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover text-nowrap">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Categoría</th>
+            <th>Gestor</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Municipio</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for evento in eventos %}
+          <tr>
+            <td><a href="{% url 'eventos:evento_detail' evento.pk %}" class="text-decoration-none">{{ evento.titulo }}</a></td>
+            <td>{{ evento.categoria.nombre }}</td>
+            <td>{{ evento.cliente.nombre_comercial }}</td>
+            <td>{{ evento.fecha|date:"d/m/Y" }}</td>
+            <td>{{ evento.horario|time:"H:i" }}</td>
+            <td>{{ evento.municipio }}</td>
+            <td>{% if evento.precio > 0 %}${{ evento.precio|floatformat:0 }}{% else %}Gratis{% endif %}</td>
+            <td>
+              {% if evento.estado == 'no_iniciado' %}<span class="badge text-bg-secondary">No Iniciado</span>
+              {% elif evento.estado == 'en_curso' %}<span class="badge text-bg-primary">En Curso</span>
+              {% else %}<span class="badge text-bg-success">Finalizado</span>{% endif %}
+            </td>
+            <td>
+              {% if evento.activo %}<span class="badge text-bg-success">Sí</span>
+              {% else %}<span class="badge text-bg-secondary">No</span>{% endif %}
+            </td>
+            <td>
+              <div class="btn-group">
+                <a href="{% url 'eventos:evento_update' evento.pk %}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="bi bi-pencil"></i></a>
+                <a href="{% url 'eventos:evento_delete' evento.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="10" class="text-center text-muted py-4">
+              <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+              No hay eventos registrados.
+              <a href="{% url 'eventos:evento_create' %}" class="d-block mt-2">Crear el primero</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% if page_obj.has_other_pages %}
+  <div class="card-footer clearfix">
+    <ul class="pagination pagination-sm m-0 float-end">
+      {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+      {% endif %}
+      <li class="page-item active"><span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+      {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'core/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Evento — Agendate Narino{% endblock %}
+
+{% block content_header %}
+{% include 'core/includes/content_header.html' with title=title breadcrumbs=content_breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+<div class="card card-primary card-outline mb-4">
+  <div class="card-header">
+    <h5 class="card-title">Información del Evento</h5>
+  </div>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card-body">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label for="id_titulo" class="form-label">Título *</label>
+          <input type="text" class="form-control {% if form.titulo.errors %}is-invalid{% endif %}" id="id_titulo" name="titulo" value="{{ form.titulo.value|default:'' }}" required>
+          {% if form.titulo.errors %}<div class="invalid-feedback">{{ form.titulo.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="id_categoria" class="form-label">Categoría *</label>
+          <select class="form-select {% if form.categoria.errors %}is-invalid{% endif %}" id="id_categoria" name="categoria" required>
+            <option value="">Seleccionar categoría</option>
+            {% for cat in form.categoria.field.queryset %}
+              <option value="{{ cat.pk }}" {% if form.categoria.value == cat.pk %}selected{% endif %}>{{ cat.nombre }}</option>
+            {% endfor %}
+          </select>
+          {% if form.categoria.errors %}<div class="invalid-feedback">{{ form.categoria.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label for="id_cliente" class="form-label">Gestor Cultural *</label>
+          {% if cliente_disabled %}
+            <input type="hidden" name="cliente" value="{{ form.cliente.value }}">
+            <input type="text" class="form-control" value="{{ form.cliente.value }}" readonly>
+          {% else %}
+            <select class="form-select {% if form.cliente.errors %}is-invalid{% endif %}" id="id_cliente" name="cliente" required>
+              <option value="">Seleccionar gestor</option>
+              {% for cli in form.cliente.field.queryset %}
+                <option value="{{ cli.pk }}" {% if form.cliente.value == cli.pk %}selected{% endif %}>{{ cli.nombre_comercial }}</option>
+              {% endfor %}
+            </select>
+          {% endif %}
+          {% if form.cliente.errors %}<div class="invalid-feedback">{{ form.cliente.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="id_estado" class="form-label">Estado *</label>
+          <select class="form-select" id="id_estado" name="estado" required>
+            <option value="no_iniciado" {% if form.estado.value == 'no_iniciado' %}selected{% endif %}>No Iniciado</option>
+            <option value="en_curso" {% if form.estado.value == 'en_curso' %}selected{% endif %}>En Curso</option>
+            <option value="finalizado" {% if form.estado.value == 'finalizado' %}selected{% endif %}>Finalizado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="id_descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="id_descripcion" name="descripcion" rows="3">{{ form.descripcion.value|default:'' }}</textarea>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label for="id_fecha" class="form-label">Fecha *</label>
+          <input type="date" class="form-control {% if form.fecha.errors %}is-invalid{% endif %}" id="id_fecha" name="fecha" value="{{ form.fecha.value|default:'' }}" required>
+          {% if form.fecha.errors %}<div class="invalid-feedback">{{ form.fecha.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="id_horario" class="form-label">Horario *</label>
+          <input type="time" class="form-control {% if form.horario.errors %}is-invalid{% endif %}" id="id_horario" name="horario" value="{{ form.horario.value|default:'' }}" required>
+          {% if form.horario.errors %}<div class="invalid-feedback">{{ form.horario.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="id_precio" class="form-label">Precio</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="number" class="form-control" id="id_precio" name="precio" step="0.01" min="0" value="{{ form.precio.value|default:'0' }}">
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label d-block">Tipo de Evento *</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="tipo_abierto" value="abierto" {% if form.tipo.value == 'abierto' %}checked{% endif %} required>
+          <label class="form-check-label" for="tipo_abierto">Abierto al Público</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="tipo_control" value="control_entradas" {% if form.tipo.value == 'control_entradas' %}checked{% endif %}>
+          <label class="form-check-label" for="tipo_control">Control de Entradas</label>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="id_link_formulario" class="form-label">Link Formulario de Inscripción</label>
+        <input type="url" class="form-control" id="id_link_formulario" name="link_formulario" value="{{ form.link_formulario.value|default:'' }}" placeholder="https://...">
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label for="id_municipio" class="form-label">Municipio *</label>
+          <input type="text" class="form-control" id="id_municipio" name="municipio" value="{{ form.municipio.value|default:'' }}" required>
+        </div>
+        <div class="col-md-4">
+          <label for="id_direccion" class="form-label">Dirección *</label>
+          <input type="text" class="form-control" id="id_direccion" name="direccion" value="{{ form.direccion.value|default:'' }}" required>
+        </div>
+        <div class="col-md-4">
+          <label for="id_ubicacion" class="form-label">Ubicación (lugar) *</label>
+          <input type="text" class="form-control" id="id_ubicacion" name="ubicacion" value="{{ form.ubicacion.value|default:'' }}" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="id_detalles_ubicacion" class="form-label">Detalles de Ubicación</label>
+        <textarea class="form-control" id="id_detalles_ubicacion" name="detalles_ubicacion" rows="2">{{ form.detalles_ubicacion.value|default:'' }}</textarea>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label for="id_geolocalizacion" class="form-label">Geolocalización (lat, lng)</label>
+          <input type="text" class="form-control" id="id_geolocalizacion" name="geolocalizacion" value="{{ form.geolocalizacion.value|default:'' }}" placeholder="4.123, -74.456">
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+          <div class="form-check mt-4">
+            <input class="form-check-input" type="checkbox" id="id_activo" name="activo" {% if form.activo.value %}checked{% endif %}>
+            <label class="form-check-label" for="id_activo">Evento activo</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle me-1"></i>
+        {% if form.instance.pk %}Guardar Cambios{% else %}Crear Evento{% endif %}
+      </button>
+      <a href="{% url 'eventos:evento_list' %}" class="btn btn-secondary ms-2">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

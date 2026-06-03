@@ -1,0 +1,73 @@
+{% extends 'core/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}{{ evento.titulo }} — Agendate Narino{% endblock %}
+
+{% block content_header %}
+{% include 'core/includes/content_header.html' with title=evento.titulo breadcrumbs=content_breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title">Información del Evento</h5>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-3">Categoría</dt><dd class="col-sm-9">{{ evento.categoria.nombre }}</dd>
+          <dt class="col-sm-3">Gestor</dt><dd class="col-sm-9">{{ evento.cliente.nombre_comercial }}</dd>
+          <dt class="col-sm-3">Descripción</dt><dd class="col-sm-9">{{ evento.descripcion|default:"Sin descripción" }}</dd>
+          <dt class="col-sm-3">Estado</dt><dd class="col-sm-9">{{ evento.get_estado_display }}</dd>
+          <dt class="col-sm-3">Tipo</dt><dd class="col-sm-9">{{ evento.get_tipo_display }}</dd>
+          <dt class="col-sm-3">Fecha</dt><dd class="col-sm-9">{{ evento.fecha|date:"d/m/Y" }}</dd>
+          <dt class="col-sm-3">Hora</dt><dd class="col-sm-9">{{ evento.horario|time:"H:i" }}</dd>
+          <dt class="col-sm-3">Precio</dt><dd class="col-sm-9">{% if evento.precio > 0 %}${{ evento.precio|floatformat:2 }}{% else %}Gratis{% endif %}</dd>
+          <dt class="col-sm-3">Municipio</dt><dd class="col-sm-9">{{ evento.municipio }}</dd>
+          <dt class="col-sm-3">Dirección</dt><dd class="col-sm-9">{{ evento.direccion }}</dd>
+          <dt class="col-sm-3">Ubicación</dt><dd class="col-sm-9">{{ evento.ubicacion }}</dd>
+          <dt class="col-sm-3">Detalles</dt><dd class="col-sm-9">{{ evento.detalles_ubicacion|default:"—" }}</dd>
+          <dt class="col-sm-3">Link Formulario</dt>
+          <dd class="col-sm-9">{% if evento.link_formulario %}<a href="{{ evento.link_formulario }}" target="_blank">{{ evento.link_formulario }}</a>{% else %}—{% endif %}</dd>
+        </dl>
+      </div>
+    </div>
+
+    {% if evento.flyers.exists %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="card-title">Flyers / Multimedia</h5></div>
+      <div class="card-body">
+        <div class="row">
+          {% for flyer in evento.flyers.all %}
+          <div class="col-md-4 mb-2">
+            {% if flyer.tipo == 'imagen' %}
+              <img src="{{ flyer.archivo.url }}" alt="Flyer" class="img-fluid rounded">
+            {% else %}
+              <video controls class="img-fluid rounded"><source src="{{ flyer.archivo.url }}" type="video/mp4"></video>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header"><h5 class="card-title">Resumen</h5></div>
+      <div class="card-body">
+        <p><strong>Activo:</strong> {% if evento.activo %}<span class="badge bg-success">Sí</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}</p>
+        <p><strong>Geolocalización:</strong> {{ evento.geolocalizacion|default:"—" }}</p>
+        <p><strong>Creado:</strong> {{ evento.created_at|date:"d/m/Y H:i" }}</p>
+        <hr>
+        <a href="{% url 'eventos:evento_update' evento.pk %}" class="btn btn-primary w-100 mb-2">
+          <i class="bi bi-pencil me-1"></i>Editar
+        </a>
+        <a href="{% url 'eventos:evento_list' %}" class="btn btn-secondary w-100">Volver a la lista</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

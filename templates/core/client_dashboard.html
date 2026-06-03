@@ -1,0 +1,136 @@
+{% extends 'base_adminlte.html' %}
+
+{% block page_title %}Mi Dashboard{% endblock %}
+
+{% block content %}
+<style>
+  .stat-card .card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.25rem;
+  }
+  .welcome-banner {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border-radius: .75rem;
+    color: white;
+    padding: 1.5rem;
+  }
+</style>
+
+{# Welcome Banner #}
+<div class="welcome-banner mb-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h4 class="mb-1">Bienvenido, {{ request.user.nombres }} {{ request.user.apellidos }}</h4>
+      <p class="mb-0 opacity-75">Gestor Cultural</p>
+    </div>
+    <div class="d-none d-md-block">
+      <i class="bi bi-calendar-event-fill opacity-25" style="font-size:4rem;"></i>
+    </div>
+  </div>
+</div>
+
+{# Stats #}
+<div class="row g-4 mb-4">
+  <div class="col-sm-6 col-lg-4">
+    <div class="card border-primary">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h3 class="mb-0">{{ total_mis_eventos }}</h3>
+            <span class="fs-7 text-secondary">Total Eventos</span>
+          </div>
+          <div class="card-icon rounded-circle bg-primary bg-opacity-10 text-primary">
+            <i class="bi bi-calendar-event-fill"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-lg-4">
+    <div class="card border-success">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h3 class="mb-0">{{ mis_eventos_activos }}</h3>
+            <span class="fs-7 text-secondary">Eventos Activos</span>
+          </div>
+          <div class="card-icon rounded-circle bg-success bg-opacity-10 text-success">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-lg-4">
+    <div class="card border-info">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h3 class="mb-0">{{ proximo_evento }}</h3>
+            <span class="fs-7 text-secondary">Próximo Evento</span>
+          </div>
+          <div class="card-icon rounded-circle bg-info bg-opacity-10 text-info">
+            <i class="bi bi-calendar-plus-fill"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# My Events #}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0">
+          <i class="bi bi-calendar-event me-2"></i>Mis Eventos
+        </h3>
+        <a href="#" class="btn btn-primary btn-sm">
+          <i class="bi bi-plus-circle me-1"></i>Nuevo Evento
+        </a>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Categoría</th>
+              <th>Fecha</th>
+              <th>Municipio</th>
+              <th>Precio</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for evento in mis_eventos %}
+            <tr>
+              <td>{{ evento.titulo }}</td>
+              <td>{{ evento.categoria.nombre }}</td>
+              <td>{{ evento.fecha|date:"d/m/Y" }}</td>
+              <td>{{ evento.municipio }}</td>
+              <td>{{ evento.precio|default:"Gratis" }}</td>
+              <td><span class="badge text-bg-{{ evento.estado|default:'secondary' }}">{{ evento.get_estado_display }}</span></td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-secondary py-4">
+                No tienes eventos registrados. ¡Crea el primero!
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

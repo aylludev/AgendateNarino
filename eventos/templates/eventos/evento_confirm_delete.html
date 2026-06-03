@@ -1,0 +1,40 @@
+{% extends 'core/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Eliminar Evento — Agendate Narino{% endblock %}
+
+{% block content_header %}
+{% include 'core/includes/content_header.html' with title='Eliminar Evento' breadcrumbs=content_breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+<div class="card card-danger card-outline mb-4">
+  <div class="card-header">
+    <h5 class="card-title">Confirmar Eliminación</h5>
+  </div>
+  <div class="card-body">
+    <div class="alert alert-warning">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      <strong>¿Estás seguro de eliminar este evento?</strong>
+      <p class="mb-0 mt-2">Esta acción no se puede deshacer.</p>
+    </div>
+    <table class="table table-bordered">
+      <tr><th style="width: 30%">Título</th><td>{{ object.titulo }}</td></tr>
+      <tr><th>Categoría</th><td>{{ object.categoria.nombre }}</td></tr>
+      <tr><th>Gestor</th><td>{{ object.cliente.nombre_comercial }}</td></tr>
+      <tr><th>Fecha</th><td>{{ object.fecha|date:"d/m/Y" }}</td></tr>
+      <tr><th>Hora</th><td>{{ object.horario|time:"H:i" }}</td></tr>
+      <tr><th>Municipio</th><td>{{ object.municipio }}</td></tr>
+    </table>
+  </div>
+  <div class="card-footer">
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">
+        <i class="bi bi-trash me-1"></i>Eliminar Evento
+      </button>
+      <a href="{% url 'eventos:evento_list' %}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

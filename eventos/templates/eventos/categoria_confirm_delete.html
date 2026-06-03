@@ -1,0 +1,29 @@
+{% extends 'core/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Eliminar Categoría — Agendate Narino{% endblock %}
+
+{% block content_header %}
+{% include 'core/includes/content_header.html' with title='Eliminar Categoría' breadcrumbs=content_breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+<div class="card card-danger card-outline mb-4">
+  <div class="card-header">
+    <h5 class="card-title">Confirmar Eliminación</h5>
+  </div>
+  <div class="card-body">
+    <p>¿Estás seguro de que querés eliminar la categoría <strong>"{{ object.nombre }}"</strong>?</p>
+    <p class="text-muted">Esta acción no se puede deshacer.</p>
+  </div>
+  <div class="card-footer">
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">
+        <i class="bi bi-trash me-1"></i> Eliminar
+      </button>
+      <a href="{% url 'eventos:categoria_list' %}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

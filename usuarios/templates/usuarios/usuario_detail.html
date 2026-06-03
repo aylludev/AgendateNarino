@@ -1,0 +1,96 @@
+{% extends 'base_adminlte.html' %}
+{% load static %}
+
+{% block title %}{{ usuario.nombres }} {{ usuario.apellidos }} — Agendate Narino{% endblock %}
+
+{% block content_header %}
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="mb-1">{{ usuario.nombres }} {{ usuario.apellidos }}</h1>
+    <p class="text-secondary mb-0">Perfil de usuario</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  {# ===== Tarjeta perfil ===== #}
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body text-center">
+        <img src="https://ui-avatars.com/api/?name={{ usuario.nombres|first }}{{ usuario.apellidos|first }}&background=0d6efd&color=fff&size=80"
+             class="rounded-circle mb-3" alt="" width="80" height="80">
+        <h4 class="mb-1">{{ usuario.nombres }} {{ usuario.apellidos }}</h4>
+        <p class="text-muted mb-3">{{ usuario.email }}</p>
+
+        {% if usuario.is_staff or usuario.is_superuser %}
+          <span class="badge bg-danger mb-2">Administrador</span>
+        {% elif usuario.is_moderador_miembro %}
+          <span class="badge bg-warning text-dark mb-2">Moderador</span>
+        {% else %}
+          <span class="badge bg-primary mb-2">Gestor Cultural</span>
+        {% endif %}
+
+        {% if usuario.is_active %}
+          <span class="badge bg-success mb-2">Activo</span>
+        {% else %}
+          <span class="badge bg-secondary mb-2">Inactivo</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <h5 class="card-title mb-0"><i class="bi bi-phone me-2"></i>Contacto</h5>
+      </div>
+      <div class="list-group list-group-flush">
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <span class="text-muted small">Teléfono</span>
+          <span>{{ usuario.telefono|default:"—" }}</span>
+        </div>
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <span class="text-muted small">Dirección</span>
+          <span>{{ usuario.direccion|default:"—" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ===== Datos ===== #}
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0"><i class="bi bi-person-badge me-2"></i>Información Personal</h5>
+      </div>
+      <div class="card-body">
+        <dl class="row g-3 mb-0">
+          <div class="col-md-6">
+            <dt class="text-muted small mb-1">Cédula</dt>
+            <dd class="fw-semibold">{{ usuario.Cedula }}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt class="text-muted small mb-1">Nombre de usuario</dt>
+            <dd class="fw-semibold">{{ usuario.username }}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt class="text-muted small mb-1">Nombres</dt>
+            <dd class="fw-semibold">{{ usuario.nombres }}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt class="text-muted small mb-1">Apellidos</dt>
+            <dd class="fw-semibold">{{ usuario.apellidos }}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt class="text-muted small mb-1">Email</dt>
+            <dd class="fw-semibold">{{ usuario.email }}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt class="text-muted small mb-1">Fecha de registro</dt>
+            <dd class="fw-semibold">{{ usuario.date_joined|date:"d/m/Y" }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

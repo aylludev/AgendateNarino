@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Redactar Mensaje - Agendate Nariño{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Redactar Mensaje</h1>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="destinatario" class="form-label">Destinatario</label>
+                <select name="destinatario" id="destinatario" class="form-control" required>
+                    <option value="">Seleccione un destinatario...</option>
+                    {% for usuario in usuarios %}
+                    <option value="{{ usuario.pk }}">{{ usuario.nombres }} {{ usuario.apellidos }} ({{ usuario.Cedula }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Mensaje</label>
+                <textarea name="descripcion" id="descripcion" class="form-control" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <a href="{% url 'messaging:inbox' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

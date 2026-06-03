@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro - Agendate Narino</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .page-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── LEFT: Form Panel ── */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 6rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      position: absolute;
+      top: 2.5rem;
+      left: 3rem;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--clr-text);
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--clr-primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-icon svg { color: white; }
+
+    .brand-name {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-name span { color: var(--clr-primary); }
+
+    .form-container {
+      max-width: 440px;
+      width: 100%;
+      animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--clr-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .form-title {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--clr-text);
+      margin-bottom: 0.6rem;
+    }
+
+    .form-subtitle {
+      font-size: 1rem;
+      color: var(--clr-text-muted);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+
+    .form-subtitle a {
+      color: var(--clr-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .form-subtitle a:hover { text-decoration: underline; }
+
+    /* ── Form Elements ── */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--clr-text);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--clr-text);
+      background: var(--clr-surface);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--clr-primary);
+      box-shadow: 0 0 0 3px rgba(181, 54, 44, 0.12);
+    }
+
+    .form-input::placeholder { color: #B0A89A; }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B5E52' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.8rem;
+      cursor: pointer;
+    }
+
+    .row-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* ── Role Selector ── */
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .role-option {
+      position: relative;
+    }
+
+    .role-option input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    .role-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      border: 1.5px solid var(--clr-border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      background: var(--clr-surface);
+      text-align: center;
+    }
+
+    .role-card:hover {
+      border-color: var(--clr-secondary);
+      transform: translateY(-1px);
+    }
+
+    .role-card svg {
+      color: var(--clr-text-muted);
+      transition: color 0.2s;
+    }
+
+    .role-card span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--clr-text-muted);
+      transition: color 0.2s;
+    }
+
+    .role-option input:checked + .role-card {
+      border-color: var(--clr-primary);
+      background: rgba(181, 54, 44, 0.05);
+    }
+
+    .role-option input:checked + .role-card svg { color: var(--clr-primary); }
+    .role-option input:checked + .role-card span { color: var(--clr-primary); font-weight: 600; }
+
+    /* ── Terms ── */
+    .terms-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .terms-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--clr-primary);
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .terms-group label {
+      font-size: 0.875rem;
+      color: var(--clr-text-muted);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .terms-group label a {
+      color: var(--clr-primary);
+      text-decoration: none;
+    }
+
+    .terms-group label a:hover { text-decoration: underline; }
+
+    /* ── Submit Button ── */
+    .btn-submit {
+      width: 100%;
+      padding: 0.95rem;
+      background: var(--clr-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(181, 54, 44, 0.3);
+    }
+
+    .btn-submit:hover {
+      background: var(--clr-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(181, 54, 44, 0.4);
+    }
+
+    .btn-submit:active { transform: translateY(0); }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      color: var(--clr-text-muted);
+      font-size: 0.8rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--clr-border);
+    }
+
+    .login-link {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--clr-text-muted);
+    }
+
+    .login-link a {
+      color: var(--clr-primary);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .login-link a:hover { text-decoration: underline; }
+
+    /* ── RIGHT: Image Panel ── */
+    .image-panel {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(26, 22, 18, 0.65) 0%,
+        rgba(181, 54, 44, 0.3) 100%
+      );
+    }
+
+    .image-panel-content {
+      position: absolute;
+      bottom: 4rem;
+      left: 3rem;
+      right: 3rem;
+      color: white;
+      animation: fadeUp 0.9s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .image-panel-content blockquote {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .image-panel-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    .image-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.08;
+      background: white;
+    }
+
+    .shape-1 {
+      width: 300px; height: 300px;
+      top: -80px; right: -60px;
+    }
+
+    .shape-2 {
+      width: 180px; height: 180px;
+      bottom: 120px; left: -50px;
+    }
+
+    .shape-3 {
+      width: 100px; height: 100px;
+      bottom: -30px; right: 80px;
+    }
+
+    /* ── Decorative pattern overlay ── */
+    .image-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .page-wrapper { grid-template-columns: 1fr; }
+
+      .image-panel {
+        display: none;
+      }
+
+      .form-panel {
+        padding: 6rem 2rem 3rem;
+        justify-content: flex-start;
+      }
+
+      .form-container { max-width: 100%; }
+
+      .brand { top: 1.5rem; left: 2rem; }
+    }
+
+    @media (max-width: 480px) {
+      .row-fields { grid-template-columns: 1fr; }
+      .form-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- ── LEFT: Form Panel ── -->
+  <div class="form-panel">
+    <a href="/" class="brand brand-link">
+      <div class="brand-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/>
+          <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/>
+          <path d="M3 6l0 13"/>
+          <path d="M12 6l0 13"/>
+          <path d="M21 6l0 13"/>
+        </svg>
+      </div>
+      <span class="brand-name">Agendate <span>Nariño</span></span>
+    </a>
+
+    <div class="form-container">
+      <p class="eyebrow">Nuevo registro</p>
+      <h1 class="form-title">Crea tu cuenta</h1>
+      <p class="form-subtitle">
+        ¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a>
+      </p>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="row-fields">
+          <div class="form-group">
+            <label class="form-label" for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" name="nombre" class="form-input"
+                   placeholder="Tu nombre" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" class="form-input"
+                   placeholder="300 123 4567" autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" class="form-input"
+                 placeholder="tu@correo.com" required autocomplete="email">
+        </div>
+
+        <div class="row-fields">
+          <div class="form-group">
+            <label class="form-label" for="password">Contraseña</label>
+            <input type="password" id="password" name="password" class="form-input"
+                   placeholder="Mínimo 8 caracteres" required autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password2">Confirmar</label>
+            <input type="password" id="password2" name="password2" class="form-input"
+                   placeholder="Repite la contraseña" required autocomplete="new-password">
+          </div>
+        </div>
+
+        <!-- Role selector -->
+        <label class="form-label">Tipo de cuenta</label>
+        <div class="role-selector">
+          <div class="role-option">
+            <input type="radio" name="rol" id="rol_asistente" value="asistente" checked>
+            <label class="role-card" for="rol_asistente">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                   stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>Asistente</span>
+              <small style="font-size:0.72rem;color:#9B8B80;margin-top:2px">Quiero asistir a eventos</small>
+            </label>
+          </div>
+          <div class="role-option">
+            <input type="radio" name="rol" id="rol_organizador" value="organizador">
+            <label class="role-card" for="rol_organizador">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                   stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                <line x1="16" x2="16" y1="2" y2="6"/>
+                <line x1="8" x2="8" y1="2" y2="6"/>
+                <line x1="3" x2="21" y1="10" y2="10"/>
+                <path d="m9 16 2 2 4-4"/>
+              </svg>
+              <span>Organizador</span>
+              <small style="font-size:0.72rem;color:#9B8B80;margin-top:2px">Quiero crear eventos</small>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="municipio">Municipio</label>
+          <select id="municipio" name="municipio" class="form-select">
+            <option value="">Selecciona tu municipio</option>
+            <option value="pasto">Pasto</option>
+            <option value="ipiales">Ipiales</option>
+            <option value="tumaco">Tumaco</option>
+            <option value="tuquerres">Tuquerres</option>
+            <option value="la-cruz">La Cruz</option>
+            <option value="samaniego">Samaniego</option>
+            <option value="galeras">Galeras</option>
+            <option value="funes">Funes</option>
+            <option value="otro">Otro municipio</option>
+          </select>
+        </div>
+
+        <div class="terms-group">
+          <input type="checkbox" id="terminos" required>
+          <label for="terminos">
+            Acepto los <a href="#">términos y condiciones</a> y la
+            <a href="#">política de privacidad</a>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit">Crear cuenta</button>
+
+        <div class="divider">o</div>
+
+        <p class="login-link">
+          ¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Image Panel ── -->
+  <div class="image-panel">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80"
+         alt="Cultura y tradición en Nariño"
+         loading="lazy">
+    <div class="image-overlay"></div>
+
+    <!-- Decorative shapes -->
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+
+    <div class="image-panel-content">
+      <div class="image-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+             fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        La plataforma de eventos de Nariño
+      </div>
+      <blockquote>
+        Descubre lo mejor de Nariño:<br>
+        cultura, deporte y comunidad
+      </blockquote>
+      <p>
+        Únete a miles de narindeños que ya están descubriendo
+        y creando eventos que transforman sus comunidades.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

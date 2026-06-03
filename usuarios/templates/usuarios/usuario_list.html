@@ -1,0 +1,116 @@
+{% extends 'base_adminlte.html' %}
+{% load static %}
+
+{% block title %}Usuarios — Agendate Narino{% endblock %}
+
+{% block content_header %}
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="mb-1">Usuarios</h1>
+    <p class="text-secondary mb-0">{{ usuarios|length }} usuarios registrados</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title mb-0">
+      <i class="bi bi-people-fill me-2"></i>Listado de Usuarios
+    </h3>
+  </div>
+  <div class="card-body table-responsive p-0">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Usuario</th>
+          <th>Cédula</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th style="width: 120px;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <img src="https://ui-avatars.com/api/?name={{ usuario.nombres|first }}{{ usuario.apellidos|first }}&background=0d6efd&color=fff&size=32"
+                   class="rounded-circle" alt="" width="32" height="32">
+              <div>
+                <span class="fw-semibold">{{ usuario.nombres }} {{ usuario.apellidos }}</span>
+                <br><small class="text-muted">{{ usuario.username }}</small>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="text-dark fw-medium">{{ usuario.Cedula }}</span>
+          </td>
+          <td>
+            <a href="mailto:{{ usuario.email }}" class="text-decoration-none">{{ usuario.email }}</a>
+          </td>
+          <td>
+            <span class="text-muted">{{ usuario.telefono|default:"—" }}</span>
+          </td>
+          <td>
+            {% if usuario.is_staff or usuario.is_superuser %}
+              <span class="badge bg-danger">Administrador</span>
+            {% elif usuario.is_moderador_miembro %}
+              <span class="badge bg-warning text-dark">Moderador</span>
+            {% else %}
+              <span class="badge bg-primary">Gestor Cultural</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if usuario.is_active %}
+              <span class="badge bg-success">Activo</span>
+            {% else %}
+              <span class="badge bg-secondary">Inactivo</span>
+            {% endif %}
+          </td>
+          <td>
+            <small class="text-muted">{{ usuario.date_joined|date:"d/m/Y" }}</small>
+          </td>
+          <td>
+            {% if request.user.is_admin_or_mod and usuario != request.user %}
+              <div class="d-flex gap-1">
+                {# Toggle activo #}
+                <form method="POST" action="{% url 'usuarios:usuario_list' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="usuario_id" value="{{ usuario.pk }}">
+                  <input type="hidden" name="action" value="toggle_active">
+                  <button type="submit" class="btn btn-sm {% if usuario.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}">
+                    <i class="bi {% if usuario.is_active %}bi-person-dash{% else %}bi-person-check{% endif %}"></i>
+                  </button>
+                </form>
+                {# Toggle moderador #}
+                <form method="POST" action="{% url 'usuarios:usuario_list' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="usuario_id" value="{{ usuario.pk }}">
+                  <input type="hidden" name="action" value="toggle_mod">
+                  <button type="submit" class="btn btn-sm {% if usuario.is_moderador_miembro %}btn-warning{% else %}btn-outline-warning{% endif %}">
+                    <i class="bi bi-shield-check"></i>
+                  </button>
+                </form>
+              </div>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-5">
+            <div class="text-secondary">
+              <i class="bi bi-people display-4 mb-3 d-block opacity-25"></i>
+              <p class="mb-0">No hay usuarios registrados.</p>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

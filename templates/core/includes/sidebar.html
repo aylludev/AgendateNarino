@@ -1,0 +1,72 @@
+{% load static %}
+<!--begin::Sidebar-->
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand">
+    <a href="{% url 'home' %}" class="brand-link">
+      <span class="brand-text fw-light">Agendate Narino</span>
+    </a>
+  </div>
+  <div class="sidebar-wrapper">
+    <nav class="mt-2">
+      <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" aria-label="Main navigation" data-accordion="false" id="navigation">
+
+        {% if request.user.is_admin_or_mod %}
+        {# ===== Menú Admin / Moderador ===== #}
+        <li class="nav-item">
+          <a href="{% url 'core:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i class="nav-icon bi bi-speedometer"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'eventos:evento_list' %}" class="nav-link {% if request.resolver_match.url_name == 'evento_list' or request.resolver_match.url_name == 'evento_create' or request.resolver_match.url_name == 'evento_update' or request.resolver_match.url_name == 'evento_delete' or request.resolver_match.url_name == 'evento_detail' %}active{% endif %}">
+            <i class="nav-icon bi bi-calendar-event"></i>
+            <p>Eventos</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'eventos:categoria_list' %}" class="nav-link {% if request.resolver_match.url_name == 'categoria_list' or request.resolver_match.url_name == 'categoria_create' or request.resolver_match.url_name == 'categoria_update' or request.resolver_match.url_name == 'categoria_delete' %}active{% endif %}">
+            <i class="nav-icon bi bi-tags"></i>
+            <p>Categorías</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'usuarios:usuario_list' %}" class="nav-link {% if request.resolver_match.url_name == 'usuario_list' %}active{% endif %}">
+            <i class="nav-icon bi bi-people-fill"></i>
+            <p>Usuarios</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'messaging:inbox' %}" class="nav-link {% if request.resolver_match.url_name == 'inbox' %}active{% endif %}">
+            <i class="nav-icon bi bi-envelope-fill"></i>
+            <p>Mensajes{% if mensajes_nuevos > 0 %}<span class="badge text-bg-danger ms-2">{{ mensajes_nuevos }}</span>{% endif %}</p>
+          </a>
+        </li>
+
+        {% else %}
+        {# ===== Menú Gestor ===== #}
+        <li class="nav-item">
+          <a href="{% url 'core:client_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'client_dashboard' %}active{% endif %}">
+            <i class="nav-icon bi bi-speedometer"></i>
+            <p>Mi Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'eventos:evento_list' %}" class="nav-link {% if request.resolver_match.url_name == 'evento_list' or request.resolver_match.url_name == 'evento_create' or request.resolver_match.url_name == 'evento_update' %}active{% endif %}">
+            <i class="nav-icon bi bi-calendar-event"></i>
+            <p>Mis Eventos</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'eventos:evento_create' %}" class="nav-link {% if request.resolver_match.url_name == 'evento_create' %}active{% endif %}">
+            <i class="nav-icon bi bi-plus-circle-fill"></i>
+            <p>Crear Evento</p>
+          </a>
+        </li>
+        {% endif %}
+
+      </ul>
+    </nav>
+  </div>
+</aside>
+<!--end::Sidebar-->

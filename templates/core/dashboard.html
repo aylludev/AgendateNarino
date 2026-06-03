@@ -1,0 +1,238 @@
+{% extends 'base_adminlte.html' %}
+{% load static %}
+
+{% block title %}Dashboard — Agendate Narino{% endblock %}
+
+{% block content_header %}
+<div class="app-content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3 class="mb-0">Dashboard</h3>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-end">
+          <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-primary shadow-sm">
+        <i class="bi bi-calendar-event-fill"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Total Eventos</span>
+        <span class="info-box-number">{{ total_eventos }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-success shadow-sm">
+        <i class="bi bi-check-circle-fill"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Eventos Activos</span>
+        <span class="info-box-number">{{ eventos_activos }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-warning shadow-sm">
+        <i class="bi bi-people-fill"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Gestores Culturales</span>
+        <span class="info-box-number">{{ total_clientes }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-danger shadow-sm">
+        <i class="bi bi-envelope-fill"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Mensajes Nuevos</span>
+        <span class="info-box-number">{{ mensajes_nuevos }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title">Resumen de Eventos</h5>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <p class="text-center"><strong>Eventos por Mes</strong></p>
+            <div id="events-chart"></div>
+          </div>
+          <div class="col-md-4">
+            <p class="text-center"><strong>Estados</strong></p>
+            <div class="progress-group mb-3">
+              No Iniciados
+              <span class="float-end"><b>{{ eventos_no_iniciados }}</b></span>
+              <div class="progress progress-sm">
+                <div class="progress-bar text-bg-secondary" style="width: {{ eventos_no_iniciados_pct }}%"></div>
+              </div>
+            </div>
+            <div class="progress-group mb-3">
+              En Curso
+              <span class="float-end"><b>{{ eventos_en_curso }}</b></span>
+              <div class="progress progress-sm">
+                <div class="progress-bar text-bg-primary" style="width: {{ eventos_en_curso_pct }}%"></div>
+              </div>
+            </div>
+            <div class="progress-group mb-3">
+              Finalizados
+              <span class="float-end"><b>{{ eventos_finalizados }}</b></span>
+              <div class="progress progress-sm">
+                <div class="progress-bar text-bg-success" style="width: {{ eventos_finalizados_pct }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h3 class="card-title">Últimos Eventos</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Categoría</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for evento in ultimos_eventos %}
+              <tr>
+                <td>{{ evento.titulo }}</td>
+                <td>{{ evento.categoria.nombre }}</td>
+                <td>
+                  {% if evento.estado == 'no_iniciado' %}
+                    <span class="badge text-bg-secondary">No Iniciado</span>
+                  {% elif evento.estado == 'en_curso' %}
+                    <span class="badge text-bg-primary">En Curso</span>
+                  {% else %}
+                    <span class="badge text-bg-success">Finalizado</span>
+                  {% endif %}
+                </td>
+                <td>{{ evento.fecha|date:"d/m/Y" }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center text-muted">No hay eventos registrados</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="info-box mb-3 text-bg-success">
+      <span class="info-box-icon"><i class="bi bi-calendar-check-fill"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Eventos este Mes</span>
+        <span class="info-box-number">{{ eventos_mes }}</span>
+      </div>
+    </div>
+    <div class="info-box mb-3 text-bg-info">
+      <span class="info-box-icon"><i class="bi bi-currency-dollar"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">Ingresos Estimados</span>
+        <span class="info-box-number">${{ ingresos_estimados|floatformat:0 }}</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Mensajes Recientes</h3>
+      </div>
+      <div class="card-body p-0">
+        <ul class="nav nav-pills flex-column">
+          {% for mensaje in ultimos_mensajes %}
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              {{ mensaje.remitente }}
+              <span class="float-end text-muted">{{ mensaje.created_at|date:"d/m" }}</span>
+            </a>
+          </li>
+          {% empty %}
+          <li class="nav-item">
+            <span class="nav-link text-muted">No hay mensajes</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" crossorigin="anonymous"></script>
+<script>
+  const events_chart_options = {
+    series: [{
+      name: 'Eventos',
+      data: {{ eventos_por_mes|safe }},
+    }],
+    chart: {
+      height: 180,
+      type: 'area',
+      toolbar: { show: false },
+    },
+    legend: { show: false },
+    colors: ['#0d6efd'],
+    dataLabels: { enabled: false },
+    stroke: { curve: 'smooth' },
+    xaxis: {
+      type: 'datetime',
+      categories: {{ meses_labels|safe }},
+    },
+    tooltip: { x: { format: 'MMMM yyyy' } },
+  };
+  const events_chart = new ApexCharts(document.querySelector('#events-chart'), events_chart_options);
+  events_chart.render();
+</script>
+{% endblock %}

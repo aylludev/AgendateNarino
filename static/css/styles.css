@@ -1,0 +1,162 @@
+/* ============================================
+   AGENDATE NARINO — Design Tokens & Base Styles
+   Shared across all pages
+   ============================================ */
+
+/* ── CSS Variables (Design Tokens) ── */
+:root {
+  /* Colors */
+  --clr-bg:           #FAF7F2;
+  --clr-bg-dark:      #EDE8DF;
+  --clr-primary:      #B5362C;
+  --clr-primary-dark:  #8C2820;
+  --clr-primary-light: #D4564A;
+  --clr-secondary:     #D4956A;
+  --clr-accent:       #E8C07D;
+  --clr-text:         #1A1612;
+  --clr-text-muted:   #6B5E52;
+  --clr-surface:      #FFFFFF;
+  --clr-border:       #D9D0C4;
+
+  /* Bootstrap overrides */
+  --bs-primary:       var(--clr-primary);
+  --bs-primary-rgb:   181, 54, 44;
+  --bs-link-color:    var(--clr-primary);
+  --bs-link-hover-color: var(--clr-primary-dark);
+
+  /* Typography */
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Radius */
+  --radius-sm:  6px;
+  --radius:     12px;
+  --radius-lg:  20px;
+  --radius-xl:  32px;
+
+  /* Shadows */
+  --shadow-sm:  0 2px 8px rgba(26,22,18,0.06);
+  --shadow:     0 8px 32px rgba(26,22,18,0.10);
+  --shadow-lg:  0 20px 60px rgba(26,22,18,0.15);
+}
+
+/* ── Base Reset & Typography ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+a {
+  color: var(--clr-primary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+a:hover { color: var(--clr-primary-dark); }
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--clr-bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--clr-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--clr-secondary); }
+
+/* ── Selection ── */
+::selection { background: var(--clr-accent); color: var(--clr-text); }
+
+/* ── Bootstrap Button Overrides ── */
+.btn-primary {
+  --bs-btn-bg:        var(--clr-primary);
+  --bs-btn-border-color: var(--clr-primary);
+  --bs-btn-hover-bg:    var(--clr-primary-dark);
+  --bs-btn-hover-border-color: var(--clr-primary-dark);
+  --bs-btn-active-bg:   var(--clr-primary-dark);
+  --bs-btn-active-border-color: var(--clr-primary-dark);
+  font-family: var(--font-body);
+  font-weight: 600;
+  border-radius: var(--radius);
+  padding: 0.65rem 1.5rem;
+  transition: all 0.2s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(181,54,44,0.35);
+}
+.btn-primary:active { transform: translateY(0); }
+
+/* ── Card Overrides ── */
+.card {
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+}
+
+/* ── Form Controls ── */
+.form-control, .form-select {
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--clr-surface);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(181,54,44,0.12);
+}
+.form-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--clr-text);
+}
+
+/* ── Badge / Pill Overrides ── */
+.badge.bg-primary { background-color: var(--clr-primary) !important; }
+.badge.bg-warning { background-color: var(--clr-accent) !important; color: var(--clr-text); }
+.badge.bg-danger  { background-color: var(--clr-primary) !important; }
+.badge.bg-info    { background-color: var(--clr-secondary) !important; color: white; }
+.badge.bg-success{ background-color: #3D7A5A !important; }
+
+/* ── Section spacing ── */
+.section { padding: 5rem 0; }
+.section-sm { padding: 3rem 0; }
+
+/* ── Eyebrow text ── */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--clr-secondary);
+}
+
+/* ── Animate on scroll ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

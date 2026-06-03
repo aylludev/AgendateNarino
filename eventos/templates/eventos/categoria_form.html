@@ -1,0 +1,45 @@
+{% extends 'core/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Categoría — Agendate Narino{% endblock %}
+
+{% block content_header %}
+{% include 'core/includes/content_header.html' with title=title breadcrumbs=content_breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+<div class="card card-primary card-outline mb-4">
+  <div class="card-header">
+    <h5 class="card-title">Información de la Categoría</h5>
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="id_nombre" class="form-label">Nombre *</label>
+        <input type="text" class="form-control {% if form.nombre.errors %}is-invalid{% endif %}" id="id_nombre" name="nombre" value="{{ form.nombre.value|default:'' }}" required maxlength="100">
+        {% if form.nombre.errors %}
+          <div class="invalid-feedback">{{ form.nombre.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-3">
+        <label for="id_descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="id_descripcion" name="descripcion" rows="3">{{ form.descripcion.value|default:'' }}</textarea>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="id_activo" name="activo" {% if form.activo.value %}checked{% endif %}>
+        <label class="form-check-label" for="id_activo">Categoría activa</label>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle me-1"></i>
+        {% if form.instance.pk %}Guardar Cambios{% else %}Crear Categoría{% endif %}
+      </button>
+      <a href="{% url 'eventos:categoria_list' %}" class="btn btn-secondary ms-2">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
