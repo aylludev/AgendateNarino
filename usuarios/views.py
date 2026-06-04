@@ -92,6 +92,8 @@ def registro(request):
                 messages.error(request, 'Debés aceptar los términos y condiciones para registrarte.')
                 return render(request, 'usuarios/registro.html', {'form': form})
 
+            usuario = form.save()
+
             # Asignar grupo Gestor automáticamente
             from django.contrib.auth.models import Group
             grupo_gestor, _ = Group.objects.get_or_create(name='Gestor')

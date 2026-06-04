@@ -68,6 +68,8 @@ class Usuario(AbstractUser):
 
     def in_group(self, group_name):
         """Check if user belongs to a group by name."""
+        if self.pk is None:
+            return False
         return self.groups.filter(name=group_name).exists()
 
     def is_gestor(self):
@@ -84,10 +86,11 @@ class Usuario(AbstractUser):
 
     def save(self, *args, **kwargs):
         # Sincronizar is_moderador con pertenencia al grupo antes de guardar
-        if self.in_group('Moderador') and not self.is_moderador:
-            self.is_moderador = True
-        elif not self.in_group('Moderador') and self.is_moderador:
-            self.is_moderador = False
+        if self.pk is not None:
+            if self.in_group('Moderador') and not self.is_moderador:
+                self.is_moderador = True
+            elif not self.in_group('Moderador') and self.is_moderador:
+                self.is_moderador = False
         super().save(*args, **kwargs)
 
 
