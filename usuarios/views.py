@@ -70,12 +70,13 @@ class LoginView(AuthLoginView):
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
+        from django.urls import reverse
         user = self.request.user
         if user.is_admin_or_mod():
-            return '/core/dashboard/'
+            return reverse('core:dashboard')
         elif user.is_gestor():
-            return '/core/client_dashboard/'
-        return '/'
+            return reverse('core:client_dashboard')
+        return reverse('home')
 
     def form_invalid(self, form):
         messages.error(self.request, 'Usuario o contraseña inválidos')
