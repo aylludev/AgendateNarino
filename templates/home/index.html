@@ -29,40 +29,7 @@
     {% endfor %}
   {% endif %}
   <!-- Navbar Start -->
-  <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
-    <div class="container">
-      <a class="navbar-brand d-inline-flex gap-2 align-items-center lh-1" href="index.html">
-        <span class="text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-book">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" />
-            <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" />
-            <path d="M3 6l0 13" />
-            <path d="M12 6l0 13" />
-            <path d="M21 6l0 13" />
-          </svg></span>
-        <span class="fw-bold">Agendate Narino</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a href="#hero" class="nav-link">Inicio</a></li>
-          <li class="nav-item"><a href="#eventos" class="nav-link">Eventos</a></li>
-          <li class="nav-item"><a href="#organizadores" class="nav-link">Organizadores</a></li>
-          <li class="nav-item"><a href="#comunidad" class="nav-link">Comunidad</a></li>
-          <li class="nav-item"><a href="#testimonios" class="nav-link">Testimonios</a></li>
-          <li class="nav-item"><a href="#precios" class="nav-link">Precios</a></li>
-        </ul>
-        <div class="d-flex gap-3 align-items-center">
-          <a href="{% url 'usuarios:registro' %}" class="btn btn-primary">Registrarse</a>
-        </div>
-      </div>
-    </div>
-  </nav>
+  {% include 'includes/marketing_navbar.html' %}
 
   <section class="py-lg-13 py-8 bg-white position-relative" id="hero">
     <div class="circle-bg d-none d-lg-block"></div>
