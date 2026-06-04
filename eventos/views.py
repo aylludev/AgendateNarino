@@ -1,17 +1,39 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Count, Q
 from datetime import date
 from .models import Categoria, Evento, EventoFlyer
 from .forms import CategoriaForm, EventoForm
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
+Usuario = get_user_model()
+
 
 def home(request):
     """Landing page pública (templates/home/index.html)."""
-    return render(request, 'home/index.html')
+    eventos_destacados = (
+        Evento.objects
+        .filter(activo=True, fecha__gte=date.today())
+        .select_related('categoria', 'gestor')
+        .prefetch_related('flyers')
+        .order_by('fecha')[:4]
+    )
+
+    gestores_destacados = list(
+        Usuario.objects
+        .filter(groups__name='Gestor', is_active=True)
+        .annotate(num_eventos=Count('gestionados', filter=Q(gestionados__activo=True)))
+        .order_by('-num_eventos', 'nombres')[:4]
+    )
+
+    return render(request, 'home/index.html', {
+        'eventos_destacados': eventos_destacados,
+        'gestores_destacados': gestores_destacados,
+    })
 
 
 def evento_explore(request):

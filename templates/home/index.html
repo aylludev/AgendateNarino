@@ -206,338 +206,59 @@
           </div>
         </div>
       </div>
-      <div>
-        <!-- Course Card Start -->
+      <div><!-- Course Card Start -->
         <div class="row g-4">
-          <!-- Course Card 1 -->
-          <div class="col-lg-3 col-md-6">
-
-            <div class="card  shadow-sm h-100 rounded-5 card-lift">
-              <div class="position-relative overflow-hidden">
-                <img src="{% static 'home/images/course-img-1.jpg' %}" class="rounded-top-5 card-img-top" alt="Course 1">
-                <div class="position-absolute top-0 start-0 p-3">
-                  <span class="badge bg-warning rounded-pill fw-normal text-xs">Cultura</span>
-                </div>
-              </div>
-              <div class="card-body p-6">
-
-                <h3 class="mb-1 fs-6">
-                  Festival de Arte Popular</h3>
-                <div class="text-xs d-flex gap-2 align-items-center mt-4 mb-8">
-                  <img src="{% static 'home/images/avatar-1.jpg' %}" alt="" class="avatar avatar-xs rounded-circle">
-                  <span>Maria Lopez</span>
-                </div>
-                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-clock">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="12" cy="12" r="9" />
-                        <polyline points="12 7 12 12 15 15" />
-                      </svg>
+          {% for evento in eventos_destacados %}
+            <div class="col-lg-3 col-md-6">
+              <div class="card shadow-sm h-100 rounded-5 card-lift">
+                <div class="position-relative overflow-hidden" style="aspect-ratio: 4/3; background: linear-gradient(135deg, #1a4a2e 0%, #0f3020 100%);">
+                  {% with flyer=evento.flyers.first %}
+                    {% if flyer %}
+                      <img src="{{ flyer.archivo.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ evento.titulo }}">
+                    {% else %}
+                      <div class="d-flex align-items-center justify-content-center h-100 text-white opacity-50">
+                        <i class="bi bi-calendar-event" style="font-size: 4rem;"></i>
+                      </div>
+                    {% endif %}
+                  {% endwith %}
+                  <div class="position-absolute top-0 start-0 p-3">
+                    <span class="badge bg-warning rounded-pill fw-normal text-xs">
+                      {{ evento.categoria.nombre|default:"Evento" }}
                     </span>
-                    <span>1 dia</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-users">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                      </svg>
-                    </span>
-                    <span>150</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                        fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                          d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                      </svg>
-                    </span>
-                    <span>4.9</span>
-                  </div>
-
-
-
-
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                  <span class="fs-5 text-dark fw-bold">Gratis</span>
-                  <a href="#" class="small link-primary "><span>Ver evento</span>
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-arrow-right ms-1">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <line x1="13" y1="18" x2="19" y2="12"></line>
-                        <line x1="13" y1="6" x2="19" y2="12"></line>
-                      </svg>
-                    </span>
-
-                </div>
-              </div>
-
-            </div>
-            </a>
-          </div>
-          <!-- Course Card 2 -->
-          <div class="col-lg-3 col-md-6">
-            <div class="card  shadow-sm h-100 rounded-5 card-lift">
-              <div class="position-relative overflow-hidden">
-                <img src="{% static 'home/images/course-img-2.jpg' %}" class="rounded-top-5 card-img-top" alt="Course 2">
-                <div class="position-absolute top-0 start-0 p-3">
-                  <span class="badge bg-danger rounded-pill fw-normal text-xs">Artesania</span>
-                </div>
-
-              </div>
-              <div class="card-body p-6">
-
-                <h3 class="mb-1 fs-6">
-                  Feria Artesanal de Rumor</h3>
-                <div class="text-xs d-flex gap-2 align-items-center mt-4 mb-8">
-                  <img src="{% static 'home/images/avatar-2.jpg' %}" alt="" class="avatar avatar-xs rounded-circle">
-                  <span>Carlos Perez</span>
-                </div>
-                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-clock">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="12" cy="12" r="9" />
-                        <polyline points="12 7 12 12 15 15" />
-                      </svg>
-                    </span>
-                    <span>2 dias</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-users">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                      </svg>
-                    </span>
-                    <span>80</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                        fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                          d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                      </svg>
-                    </span>
-                    <span>4.8</span>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                  <span class="fs-5 text-dark fw-bold">Gratis</span>
-                  <a href="#" class="small link-primary "><span>Ver evento</span>
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-arrow-right ms-1">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <line x1="13" y1="18" x2="19" y2="12"></line>
-                        <line x1="13" y1="6" x2="19" y2="12"></line>
-                      </svg>
-                    </span>
-                  </a>
-
-
-
+                <div class="card-body p-6">
+                  <h3 class="mb-1 fs-6">
+                    <a href="{% url 'eventos:evento_detail' evento.pk %}" class="text-decoration-none text-body">
+                      {{ evento.titulo }}
+                    </a>
+                  </h3>
+                  <div class="text-xs d-flex gap-2 align-items-center mt-4 mb-8">
+                    <i class="bi bi-person-circle text-secondary"></i>
+                    <span>{{ evento.gestor.nombres }} {{ evento.gestor.apellidos|default:"" }}</span>
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
+                    <div class="text-xs align-items-center d-flex gap-1 lh-1">
+                      <i class="bi bi-geo-alt text-secondary"></i>
+                      <span>{{ evento.municipio|default:"Nariño" }}</span>
+                    </div>
+                    <div class="text-xs align-items-center d-flex gap-1 lh-1">
+                      <i class="bi bi-calendar3 text-secondary"></i>
+                      <span>{{ evento.fecha|date:"d M" }}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- Course Card 3 -->
-          <div class="col-lg-3 col-md-6">
-            <div class="card  shadow-sm h-100 rounded-5 card-lift">
-              <div class="position-relative overflow-hidden">
-                <img src="{% static 'home/images/course-img-3.jpg' %}" class="rounded-top-5 card-img-top" alt="Course 3">
-                <div class="position-absolute top-0 start-0 p-3">
-                  <span class="badge bg-info rounded-pill fw-normal text-xs">Deporte</span>
-                </div>
-              </div>
-              <div class="card-body p-6">
-
-                <h3 class="mb-1 fs-6">
-                  Torneo de Futbol Base</h3>
-                <div class="text-xs d-flex gap-2 align-items-center mt-4 mb-8">
-                  <img src="{% static 'home/images/avatar-3.jpg' %}" alt="" class="avatar avatar-xs rounded-circle">
-                  <span>Ana Gomez</span>
-                </div>
-                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-clock">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="12" cy="12" r="9" />
-                        <polyline points="12 7 12 12 15 15" />
-                      </svg>
-                    </span>
-                    <span>3 dias</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-users">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                      </svg>
-                    </span>
-                    <span>200</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                        fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                          d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                      </svg>
-                    </span>
-                    <span>4.9</span>
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                  <span class="fs-5 text-dark fw-bold">Gratis</span>
-                  <a href="#" class="small link-primary "><span>Ver evento</span>
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-arrow-right ms-1">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <line x1="13" y1="18" x2="19" y2="12"></line>
-                        <line x1="13" y1="6" x2="19" y2="12"></line>
-                      </svg>
-                    </span>
-                  </a>
-                </div>
-              </div>
+          {% empty %}
+            <div class="col-12 text-center text-secondary py-5">
+              <i class="bi bi-calendar-x display-4 d-block mb-3 opacity-25"></i>
+              <p class="mb-2">Pronto publicaremos los próximos eventos.</p>
+              <a href="{% url 'usuarios:registro' %}" class="btn btn-sm btn-primary">Registrate como gestor cultural</a>
             </div>
-          </div>
-          <!-- Course Card 4 -->
-          <div class="col-lg-3 col-md-6">
-            <div class="card  shadow-sm h-100 rounded-5 card-lift">
-              <div class="position-relative overflow-hidden">
-                <img src="{% static 'home/images/course-img-4.jpg' %}" class="rounded-top-5 card-img-top" alt="Course 4">
-                <div class="position-absolute top-0 start-0 p-3">
-                  <span class="badge bg-success rounded-pill fw-normal text-xs">Social</span>
-                </div>
-              </div>
-              <div class="card-body p-6">
-
-                <h3 class="mb-1 fs-6">
-                  Jornada de Salud Comunitaria</h3>
-                <div class="text-xs d-flex gap-2 align-items-center mt-4 mb-8">
-                  <img src="{% static 'home/images/avatar-4.jpg' %}" alt="" class="avatar avatar-xs rounded-circle">
-                  <span>Luis Martinez</span>
-                </div>
-                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-clock">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="12" cy="12" r="9" />
-                        <polyline points="12 7 12 12 15 15" />
-                      </svg>
-                    </span>
-                    <span>1 dia</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-users">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        <path d="M21 21v-2a4 4 0  0 0 -3 -3.85" />
-                      </svg>
-                    </span>
-                    <span>45</span>
-                  </div>
-                  <div class="text-xs align-items-center d-flex gap-1 lh-1">
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                        fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                          d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                      </svg>
-                    </span>
-                    <span>4.7</span>
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                  <span class="fs-5 text-dark fw-bold">Gratis</span>
-                  <a href="#" class="small link-primary "><span>Ver evento</span>
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="icon icon-tabler icons-tabler-arrow-right ms-1">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <line x1="13" y1="18" x2="19" y2="12"></line>
-                        <line x1="13" y1="6" x2="19" y2="12"></line>
-                      </svg>
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+          {% endfor %}
         </div>
-        <div class="row">
-          <div class="col-12 text-center mt-10">
-            <a href="#" class="btn btn-outline-dark"> <span>
-                Ver todos los eventos
-              </span>
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-arrow-right ms-1">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <line x1="13" y1="18" x2="19" y2="12"></line>
-                  <line x1="13" y1="6" x2="19" y2="12"></line>
-                </svg>
-              </span>
-            </a>
-          </div>
-
-        </div>
+      </div>
 
 
 
@@ -556,311 +277,56 @@
             <span class="text-primary text-uppercase small fw-semibold" style="letter-spacing: .125rem;">Organizadores</span>
             <h2 class="fw-bold mt-4 mb-4">Conoce a los <span class="text-primary">organizadores</span></h2>
             <p class="mb-0">
-              Organizadores locales comprometidos con bring culture and activities a sus comunidades.
+              Gestores culturales de Nariño comprometidos con difundir la cultura y las artes en sus municipios.
             </p>
           </div>
         </div>
       </div>
-
-      <div class="row g-4">
-        <!-- Mentor Card 1 -->
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card  shadow-sm h-100 rounded-5 text-center p-6 card-lift">
-            <div class="position-relative mb-4"><img src="{% static 'home/images/avatar-4.jpg' %}" alt="Mentor 1"
-                class="rounded-circle mb-4 mx-auto avatar avatar-xl border border-3 border-warning" />
-              <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
-                <span class="badge bg-warning text-xs">
-                  <span> 4.9</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"
-                    class="icon icon-tabler icons-tabler-filled icon-tabler-star text-white">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path
-                      d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                  </svg>
-                </span>
+<div class="row g-4">
+        {% for gestor in gestores_destacados %}
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card shadow-sm h-100 rounded-5 text-center p-6 card-lift">
+              <div class="position-relative mb-4">
+                <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                     style="width:96px;height:96px;background:var(--bs-primary-bg-subtle);color:var(--bs-primary);font-weight:700;font-size:2rem;">
+                  {{ gestor.nombres|slice:":1"|upper }}{{ gestor.apellidos|slice:":1"|upper|default:gestor.username|slice:":1"|upper }}
+                </div>
+                <div class="position-absolute top-100 start-50 translate-middle mt-n2">
+                  <span class="badge bg-warning text-xs">
+                    <i class="bi bi-star-fill text-white"></i>
+                    <span>Gestor</span>
+                  </span>
+                </div>
+              </div>
+              <h3 class="h6 fw-bold mb-1 mt-3">
+                {{ gestor.nombres }} {{ gestor.apellidos|default:gestor.username }}
+              </h3>
+              <span class="text-secondary mb-3 d-block text-xs">Gestor Cultural</span>
+              <p class="mb-4 small text-secondary">
+                {% if gestor.email %}<i class="bi bi-envelope me-1"></i>{{ gestor.email }}{% else %}Promotor de eventos culturales en Nariño.{% endif %}
+              </p>
+              <div class="d-flex justify-content-center gap-4 small">
+                <div class="d-flex flex-column align-items-center">
+                  <span class="fw-bold text-body">{{ gestor.num_eventos|default:0 }}</span>
+                  <span class="text-secondary">Eventos</span>
+                </div>
+                <div class="d-flex flex-column align-items-center">
+                  <span class="fw-bold text-body">
+                    <i class="bi bi-geo-alt text-primary"></i>
+                  </span>
+                  <span class="text-secondary">Nariño</span>
+                </div>
               </div>
             </div>
-
-            <h3 class="h6 fw-bold mb-1">Juan Carlos M.</h3>
-            <span class="text-muted mb-3 d-block text-xs">Promotor Cultural</span>
-            <p class="mb-4">
-              Organizador de eventos culturales en Pasto desde 2018.
-            </p>
-            <div class="d-flex justify-content-center gap-6 small">
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">20K+</span>
-                <span>Students</span>
-              </div>
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">10</span>
-                <span>Courses</span>
-              </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-center gap-2 mt-4 mb-2">
-
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-x">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M8 11v5" />
-                  <path d="M8 8v.01" />
-                  <path d="M12 16v-5" />
-                  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
-                  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-brand-github ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12 12 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-                </svg>
-
-              </a>
-            </div>
-
           </div>
-
-        </div>
-        <!-- Mentor Card 2 -->
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card  shadow-sm h-100 rounded-5 text-center p-6 card-lift">
-            <div class="position-relative mb-4"><img src="{% static 'home/images/avatar-5.jpg' %}" alt="Mentor 2"
-                class="rounded-circle mb-4 mx-auto avatar avatar-xl border border-3 border-warning" />
-              <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
-                <span class="badge bg-warning text-xs">
-                  <span> 4.8</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"
-                    class="icon icon-tabler icons-tabler-filled icon-tabler-star text-white">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path
-                      d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-
-            <h3 class="h6 fw-bold mb-1">Ana Lucia R.</h3>
-            <span class="text-muted mb-3 d-block text-xs">Lider Comunitario</span>
-            <p class="mb-4">
-              Fundadora de la cooperativa de artesanos de La Cruz.
-            </p>
-            <div class="d-flex justify-content-center gap-6 small">
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">15K+</span>
-                <span>Students</span>
-              </div>
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">8</span>
-                <span>Courses</span>
-              </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-center gap-2 mt-4 mb-2">
-
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-x">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M8 11v5" />
-                  <path d="M8 8v.01" />
-                  <path d="M12 16v-5" />
-                  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
-                  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-brand-github ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12 12 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-                </svg>
-
-              </a>
-            </div>
-
+        {% empty %}
+          <div class="col-12 text-center text-secondary py-5">
+            <i class="bi bi-people display-4 d-block mb-3 opacity-25"></i>
+            <p class="mb-2">Pronto tendremos gestores destacados.</p>
+            <a href="{% url 'usuarios:registro' %}" class="btn btn-sm btn-primary">Sumate como gestor</a>
           </div>
-        </div>
-        <!-- Mentor Card 3 -->
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card  shadow-sm h-100 rounded-5 text-center p-6 card-lift">
-            <div class="position-relative mb-4"><img src="{% static 'home/images/avatar-6.jpg' %}" alt="Mentor 3"
-                class="rounded-circle mb-4 mx-auto avatar avatar-xl border border-3 border-warning" />
-              <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
-                <span class="badge bg-warning text-xs">
-                  <span> 4.9</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"
-                    class="icon icon-tabler icons-tabler-filled icon-tabler-star text-white">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path
-                      d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-
-            <h3 class="h6 fw-bold mb-1">Pedro F.</h3>
-            <span class="text-muted mb-3 d-block text-xs">Deportista</span>
-            <p class="mb-4">
-              Coordinador de torneos deportivos en el sur de Narino.
-            </p>
-            <div class="d-flex justify-content-center gap-6 small">
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">18K+</span>
-                <span>Students</span>
-              </div>
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">12</span>
-                <span>Courses</span>
-              </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-center gap-2 mt-4 mb-2">
-
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-x">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M8 11v5" />
-                  <path d="M8 8v.01" />
-                  <path d="M12 16v-5" />
-                  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
-                  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-brand-github ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12 12 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-                </svg>
-
-              </a>
-            </div>
-
-          </div>
-        </div>
-        <!-- Mentor Card 4 -->
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card  shadow-sm h-100 rounded-5 text-center p-6 card-lift">
-            <div class="position-relative mb-4"><img src="{% static 'home/images/avatar-2.jpg' %}" alt="Mentor 4"
-                class="rounded-circle mb-4 mx-auto avatar avatar-xl border border-3 border-warning" />
-              <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
-                <span class="badge bg-warning text-xs">
-                  <span> 4.8</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"
-                    class="icon icon-tabler icons-tabler-filled icon-tabler-star text-white">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path
-                      d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-
-            <h3 class="h6 fw-bold mb-1">Laura K.</h3>
-            <span class="text-muted mb-3 d-block text-xs">Artista local</span>
-            <p class="mb-4">
-              Artista y promoter de eventos culturales en Ipiales.
-            </p>
-            <div class="d-flex justify-content-center gap-6 small">
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">22K+</span>
-                <span>Students</span>
-              </div>
-              <div class="d-flex flex-row gap-2">
-                <span class="fw-bold text-dark">9</span>
-                <span>Courses</span>
-              </div>
-            </div>
-            <div class="d-flex flex-row align-items-center justify-content-center gap-2 mt-4 mb-2">
-
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-x">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M8 11v5" />
-                  <path d="M8 8v.01" />
-                  <path d="M12 16v-5" />
-                  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
-                  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" />
-                </svg>
-
-              </a>
-              <a href="#" class="btn rounded-circle btn-light btn-icon btn-xs">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="icon icon-tabler icons-tabler-brand-github ">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12 12 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-                </svg>
-
-              </a>
-            </div>
-
-          </div>
-
-
-
-
-
-        </div>
+        {% endfor %}
+      </div>
       </div>
   </section>
 
@@ -1123,446 +589,64 @@
         </div>
 
       </div>
-      <div class="row gx-4 gy-6">
-        <div class="col-lg-4 col-12">
+      <<div class="row gx-4 gy-6">
+        <div class="col-lg-4 col-md-6">
           <div class="card rounded-5 shadow-sm h-100 border">
             <div class="card-body p-6">
-              <div class="d-flex gap-0 align-items-center">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
+              <div class="mb-2 text-warning">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
               </div>
-              <div class="mt-4 mb-2">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-quote text-primary">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                    <path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                  </svg>
-                </span>
-
-              </div>
-              <div>
-                <p class=" fw-semibold">"LearnHub completely transformed my career. The web development bootcamp gave me
-                  the skills I needed to land my dream job at Meta. The mentors are incredible!"</p>
-              </div>
-              <div class="mt-7 pt-5 border-top">
-                <div class="d-flex gap-3 align-items-center">
-                  <img src="{% static 'home/images/avatar-1.jpg' %}" alt="" class="avatar avatar-md rounded-circle">
-                  <div>
-                    <h6 class="mb-0">Andres M.
-                    </h6>
-                    <small>Participante en Pasto</small>
-                  </div>
-
+              <i class="bi bi-quote text-primary fs-3"></i>
+              <p class="fw-semibold">&ldquo;Gracias a Agendate Nariño pude encontrar el festival de música andina en Pasto y conocer a otros gestores de la región. ¡Una plataforma que visibiliza nuestra cultura!&rdquo;</p>
+              <div class="mt-4 pt-4 border-top d-flex gap-3 align-items-center">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:var(--bs-primary-bg-subtle);color:var(--bs-primary);font-weight:600;flex-shrink:0;">AM</div>
+                <div>
+                  <h6 class="mb-0">Andres M.</h6>
+                  <small class="text-secondary">Participante en Pasto</small>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </div>
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-4 col-md-6">
           <div class="card rounded-5 shadow-sm h-100 border">
             <div class="card-body p-6">
-              <div class="d-flex gap-0 align-items-center">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
+              <div class="mb-2 text-warning">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
               </div>
-              <div class="mt-4 mb-2">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-quote text-primary">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                    <path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                  </svg>
-                </span>
-
-              </div>
-              <div>
-                <p class=" fw-semibold">"The UI/UX design course was exactly what I needed. The practical projects and
-                  mentor feedback helped me build a portfolio that got me hired at Spotify."</p>
-              </div>
-              <div class="mt-7 pt-5 border-top">
-                <div class="d-flex gap-3 align-items-center">
-                  <img src="{% static 'home/images/avatar-2.jpg' %}" alt="" class="avatar avatar-md rounded-circle">
-                  <div>
-                    <h6 class="mb-0">Laura G.
-                    </h6>
-                    <small>Asistente en Tumaco</small>
-                  </div>
-
+              <i class="bi bi-quote text-primary fs-3"></i>
+              <p class="fw-semibold">&ldquo;Como gestora cultural, Agendate Nariño me dio la visibilidad que necesitaba. Hoy publico todos mis eventos acá y la comunidad de Tumaco responde siempre.&rdquo;</p>
+              <div class="mt-4 pt-4 border-top d-flex gap-3 align-items-center">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:var(--bs-primary-bg-subtle);color:var(--bs-primary);font-weight:600;flex-shrink:0;">LG</div>
+                <div>
+                  <h6 class="mb-0">Laura G.</h6>
+                  <small class="text-secondary">Gestora cultural en Tumaco</small>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </div>
-        <div class="col-lg-4 col-12">
+        <div class="col-lg-4 col-md-6">
           <div class="card rounded-5 shadow-sm h-100 border">
             <div class="card-body p-6">
-              <div class="d-flex gap-0 align-items-center">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
+              <div class="mb-2 text-warning">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
               </div>
-              <div class="mt-4 mb-2">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-quote text-primary">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                    <path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                  </svg>
-                </span>
-
-              </div>
-              <div>
-                <p class=" fw-semibold">"I switched careers from marketing to data science thanks to LearnHub. The
-                  structured curriculum and supportive community made the transition seamless."</p>
-              </div>
-              <div class="mt-7 pt-5 border-top">
-                <div class="d-flex gap-3 align-items-center">
-                  <img src="{% static 'home/images/avatar-3.jpg' %}" alt="" class="avatar avatar-md rounded-circle">
-                  <div>
-                    <h6 class="mb-0">Carlos R.
-                    </h6>
-                    <small>Organizador en Ipiales</small>
-                  </div>
-
+              <i class="bi bi-quote text-primary fs-3"></i>
+              <p class="fw-semibold">&ldquo;El mapa de eventos me ahorra horas de búsqueda. En un click veo todo lo que pasa cerca de Ipiales y planifico mi agenda cultural del mes completo.&rdquo;</p>
+              <div class="mt-4 pt-4 border-top d-flex gap-3 align-items-center">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:var(--bs-primary-bg-subtle);color:var(--bs-primary);font-weight:600;flex-shrink:0;">CR</div>
+                <div>
+                  <h6 class="mb-0">Carlos R.</h6>
+                  <small class="text-secondary">Organizador en Ipiales</small>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </div>
-        <div class="col-lg-4 col-12">
-          <div class="card rounded-5 shadow-sm h-100 border">
-            <div class="card-body p-6">
-              <div class="d-flex gap-0 align-items-center">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-              </div>
-              <div class="mt-4 mb-2">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-quote text-primary">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                    <path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                  </svg>
-                </span>
-
-              </div>
-              <div>
-                <p class=" fw-semibold">"As a freelancer, I needed flexible learning. LearnHub's self-paced courses fit
-                  perfectly into my schedule. Highly recommend!"</p>
-              </div>
-              <div class="mt-7 pt-5 border-top">
-                <div class="d-flex gap-3 align-items-center">
-                  <img src="{% static 'home/images/avatar-4.jpg' %}" alt="" class="avatar avatar-md rounded-circle">
-                  <div>
-                    <h6 class="mb-0">Ana Patricia S.
-                    </h6>
-                    <small>Artista en La Cruz</small>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-        <div class="col-lg-4 col-12">
-          <div class="card rounded-5 shadow-sm h-100 border">
-            <div class="card-body p-6">
-              <div class="d-flex gap-0 align-items-center">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-              </div>
-              <div class="mt-4 mb-2">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-quote text-primary">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                    <path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                  </svg>
-                </span>
-
-              </div>
-              <div>
-                <p class=" fw-semibold">"The marketing course helped me understand how to grow my startup. The ROI has
-                  been incredible - best investment in my education."</p>
-              </div>
-              <div class="mt-7 pt-5 border-top">
-                <div class="d-flex gap-3 align-items-center">
-                  <img src="{% static 'home/images/avatar-5.jpg' %}" alt="" class="avatar avatar-md rounded-circle">
-                  <div>
-                    <h6 class="mb-0">Roberto D.
-                    </h6>
-                    <small>Coordinador comunitario</small>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-        <div class="col-lg-4 col-12">
-          <div class="card rounded-5 shadow-sm h-100 border">
-            <div class="card-body p-6">
-              <div class="d-flex gap-0 align-items-center">
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
-                  class="icon icon-tabler icons-tabler-filled icon-tabler-star text-warning">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path
-                    d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.093 -6.26l3.093 6.26l6.9 1l-5 4.867l1.179 6.873z" />
-                </svg>
-              </div>
-              <div class="mt-4 mb-2">
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline icon-tabler-quote text-primary">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                    <path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5" />
-                  </svg>
-                </span>
-
-              </div>
-              <div>
-                <p class=" fw-semibold">"The combination of technical and business courses gave me a unique edge. I've
-                  recommended LearnHub to all my colleagues."</p>
-              </div>
-              <div class="mt-7 pt-5 border-top">
-                <div class="d-flex gap-3 align-items-center">
-                  <img src="{% static 'home/images/avatar-6.jpg' %}" alt="" class="avatar avatar-md rounded-circle">
-                  <div>
-                    <h6 class="mb-0">Sofia A.
-                    </h6>
-                    <small>Lider juvenil en Tuquerres</small>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
       </div>
 
     </div>
@@ -1645,60 +729,48 @@
           <div class="row">
             <div class="col-lg-3 col-md-6">
               <div class="">
-                <h4 class="fs-5 mb-4">Product</h4>
+                <h4 class="fs-5 mb-4">Plataforma</h4>
                 <ul class="list-unstyled lh-lg small">
-                  <li><a href="#">Features</a>
-
-
-                  </li>
-                  <li><a href="#">Pricing</a></li>
-                  <li><a href="#">Courses</a></li>
-                  <li><a href="#">Community</a></li>
+                  <li><a href="{% url 'evento_explore' %}">Explorar eventos</a></li>
+                  <li><a href="{% url 'eventos:evento_list' %}">Mis eventos</a></li>
+                  <li><a href="{% url 'messaging:inbox' %}">Mensajes</a></li>
+                  <li><a href="{% url 'usuarios:registro' %}">Registrarse</a></li>
                 </ul>
               </div>
 
             </div>
             <div class="col-lg-3 col-md-6">
               <div>
-                <h4 class="fs-5 mb-4">Company</h4>
+                <h4 class="fs-5 mb-4">Organización</h4>
                 <ul class="list-unstyled lh-lg small">
-                  <li><a href="#">About Us</a>
-
-
-                  </li>
-                  <li><a href="#">Careers</a></li>
-                  <li><a href="#">Blog</a></li>
-                  <li><a href="#">Press</a></li>
+                  <li><a href="#">Sobre nosotros</a></li>
+                  <li><a href="#">Equipo</a></li>
+                  <li><a href="#">Contacto</a></li>
+                  <li><a href="#">Aliados</a></li>
                 </ul>
               </div>
 
             </div>
             <div class="col-lg-3 col-md-6">
               <div>
-                <h4 class="fs-5 mb-4">Support</h4>
+                <h4 class="fs-5 mb-4">Ayuda</h4>
                 <ul class="list-unstyled lh-lg small">
-                  <li><a href="#">Help Center</a>
-
-
-                  </li>
-                  <li><a href="#">Contact Us</a></li>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Terms of Service</a></li>
+                  <li><a href="#">Preguntas frecuentes</a></li>
+                  <li><a href="#">Cómo publicar un evento</a></li>
+                  <li><a href="#">Términos de uso</a></li>
+                  <li><a href="#">Privacidad</a></li>
                 </ul>
               </div>
 
             </div>
             <div class="col-lg-3 col-md-6">
               <div>
-                <h4 class="fs-5 mb-4">Help Center</h4>
+                <h4 class="fs-5 mb-4">Comunidad</h4>
                 <ul class="list-unstyled lh-lg small">
-                  <li><a href="#">Web Development</a>
-
-
-                  </li>
-                  <li><a href="#">UI/UX Design</a></li>
-                  <li><a href="#">Data Science</a></li>
-                  <li><a href="#">Marketing</a></li>
+                  <li><a href="#">Gestores culturales</a></li>
+                  <li><a href="#">Mapa de eventos</a></li>
+                  <li><a href="#">Calendario</a></li>
+                  <li><a href="#">Novedades</a></li>
                 </ul>
               </div>
 
@@ -1712,7 +784,7 @@
       <div class="border-top mt-8 pt-6 row small">
         <div class="col-12 d-flex flex-column flex-md-row justify-content-between">
           <div>
-            <p>© 2026 LearnHub. All rights reserved. Developed by <a href="https://codescandy.com/" class="link-primary" target="_blank">Codescandy</a> • Distributed by <a href="https://themewagon.com/" class="link-primary" target="_blank">ThemeWagon</a>
+            <p>© 2026 Agendate Nariño. Plataforma cultural del departamento de Nariño, Colombia.
             </p>
           </div>
           <div>
