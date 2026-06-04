@@ -17,7 +17,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     """WebSocket consumer for 1:1 chat."""
 
     async def connect(self):
-        self.me = self.scope['url_route']['kwargs']['user_id']
+        self.me = int(self.scope['url_route']['kwargs']['user_id'])
         self.room_name = get_room_name(self.me, self.scope['user'].id)
 
         await self.channel_layer.group_add(self.room_name, self.channel_name)
