@@ -1,48 +1,16 @@
-from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.db.models import Count
-from datetime import date
 from .models import Categoria, Evento, EventoFlyer
 from .forms import CategoriaForm, EventoForm
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 
 def home(request):
-    """Landing page pública."""
-    today = date.today()
-    eventos_destacados = Evento.objects.filter(activo=True, fecha__gte=today).order_by('fecha')[:6]
-    eventos_totales = Evento.objects.filter(activo=True, fecha__gte=today).count()
-    total_gestores = Evento.objects.filter(activo=True).values('gestor').distinct().count()
-    municipios = Evento.objects.filter(activo=True, fecha__gte=today).values('municipio').distinct().count()
-
-    map_events = []
-    for e in Evento.objects.filter(activo=True, fecha__gte=today, geolocalizacion__isnull=False).exclude(geolocalizacion='').select_related('categoria')[:50]:
-        try:
-            lat, lng = e.geolocalizacion.split(',')
-            map_events.append({
-                'id': e.id,
-                'title': e.titulo,
-                'lat': float(lat.strip()),
-                'lng': float(lng.strip()),
-                'category': e.categoria.nombre if e.categoria else 'General',
-                'date': e.fecha.strftime('%d/%m/%Y'),
-                'municipio': e.municipio,
-            })
-        except (ValueError, AttributeError):
-            continue
-
-    import json
-    return render(request, 'eventos/home.html', {
-        'eventos_destacados': eventos_destacados,
-        'eventos_totales': eventos_totales,
-        'total_gestores': total_gestores,
-        'municipios': municipios,
-        'map_events_json': json.dumps(map_events),
-    })
+    """Landing page pública (templates/home/index.html)."""
+    return render(request, 'home/index.html')
 
 
 def _is_moderador(user):
