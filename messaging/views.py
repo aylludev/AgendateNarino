@@ -10,7 +10,7 @@ from usuarios.models import Usuario
 
 @login_required
 def inbox(request):
-    """List conversations for the current user."""
+    """Inbox split-view: lista de conversaciones (izq) + preview/chat (der)."""
     from django.db.models import Max
 
     sent = Message.objects.filter(remitente=request.user).values_list('destinatario_id', flat=True)
@@ -40,7 +40,38 @@ def inbox(request):
             })
 
     conversations.sort(key=lambda x: x['last_message_date'], reverse=True)
-    return render(request, 'messaging/inbox.html', {'conversations': conversations})
+
+    # Conversación seleccionada (preview panel)
+    selected_peer = None
+    messages = []
+    room_name = None
+    peer_id = request.GET.get('with')
+    if peer_id:
+        try:
+            selected_peer = Usuario.objects.get(pk=peer_id)
+        except (Usuario.DoesNotExist, ValueError):
+            selected_peer = None
+
+    if selected_peer and selected_peer != request.user:
+        ids = sorted([request.user.id, selected_peer.id])
+        room_name = f"chat_{ids[0]}_{ids[1]}"
+
+        messages = Message.objects.filter(
+            Q(remitente=request.user, destinatario=selected_peer) |
+            Q(remitente=selected_peer, destinatario=request.user)
+        ).order_by('created_at')
+
+        # Marcar como leídos los mensajes recibidos
+        Message.objects.filter(
+            remitente=selected_peer, destinatario=request.user, leido=False
+        ).update(leido=True)
+
+    return render(request, 'messaging/inbox.html', {
+        'conversations': conversations,
+        'selected_peer': selected_peer,
+        'messages': messages,
+        'room_name': room_name,
+    })
 
 
 @login_required
