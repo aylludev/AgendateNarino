@@ -83,7 +83,7 @@ def compose(request):
                 descripcion=descripcion
             )
             messages.success(request, 'Mensaje enviado correctamente.')
-            return redirect('messaging:chat_room', destinatario_id=destinatario.pk)
+            return redirect('messaging:chat_room', user_id=destinatario.pk)
         except Usuario.DoesNotExist:
             messages.error(request, 'Destinatario no encontrado.')
 
