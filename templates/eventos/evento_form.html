@@ -56,6 +56,19 @@
               {% endif %}
             </div>
 
+            <div class="col-12">
+              <label for="id_flyer" class="form-label">
+                <i class="bi bi-image me-1"></i>Flyer del evento
+              </label>
+              {{ form.flyer }}
+              {% if form.flyer.help_text %}
+                <small class="text-muted d-block mt-1">{{ form.flyer.help_text }}</small>
+              {% endif %}
+              {% if form.flyer.errors %}
+                <div class="invalid-feedback d-block">{{ form.flyer.errors }}</div>
+              {% endif %}
+            </div>
+
             <div class="col-md-4">
               <div class="form-floating">
                 {{ form.estado }}

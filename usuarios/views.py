@@ -92,15 +92,19 @@ def registro(request):
                 messages.error(request, 'Debés aceptar los términos y condiciones para registrarte.')
                 return render(request, 'usuarios/registro.html', {'form': form})
 
+            # Guardar el usuario (UsuarioForm.save() setea la contraseña)
+            user = form.save()
+
             # Asignar grupo Gestor automáticamente
             from django.contrib.auth.models import Group
             grupo_gestor, _ = Group.objects.get_or_create(name='Gestor')
-            usuario.groups.add(grupo_gestor)
+            user.groups.add(grupo_gestor)
 
-            user = authenticate(request, username=usuario.username, password=form.cleaned_data['password1'])
-            if user:
-                login(request, user)
-            messages.success(request, f'¡Cuenta creada! Bienvenido, {usuario.nombres}.')
+            # Autenticar e iniciar sesión
+            auth_user = authenticate(request, username=user.username, password=form.cleaned_data['password1'])
+            if auth_user is not None:
+                login(request, auth_user)
+            messages.success(request, f'¡Cuenta creada! Bienvenido, {user.nombres}.')
             return redirect('core:client_dashboard')
         else:
             messages.error(request, 'Por favor corregí los errores indicados.')

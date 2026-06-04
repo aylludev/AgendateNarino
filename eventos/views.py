@@ -58,6 +58,8 @@ class EventoListView(ListView):
 
     def get_queryset(self):
         queryset = Evento.objects.select_related('categoria', 'gestor').order_by('-fecha')
+        if not self.request.user.is_admin_or_mod():
+            queryset = queryset.filter(gestor=self.request.user)
         buscar = self.request.GET.get('buscar')
         if buscar:
             queryset = queryset.filter(titulo__icontains=buscar)
@@ -69,7 +71,10 @@ class EventoListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Events'
-        context['total_count'] = Evento.objects.count()
+        base_qs = Evento.objects.all()
+        if not self.request.user.is_admin_or_mod():
+            base_qs = base_qs.filter(gestor=self.request.user)
+        context['total_count'] = base_qs.count()
         context['categorias'] = Categoria.objects.filter(activo=True)
         context['content_breadcrumbs'] = [{'label': 'Eventos', 'url': '', 'active': True}]
         return context

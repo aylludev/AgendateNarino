@@ -1,0 +1,352 @@
+{% extends 'base_adminlte.html' %}
+{% load static %}
+
+{% block title %}Chat con {{ peer.nombres }} — Agendate Nariño{% endblock %}
+
+{% block page_styles %}
+<style>
+  .chat-app {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0;
+    height: calc(100vh - 12rem);
+    min-height: 32rem;
+    border-radius: var(--bs-border-radius);
+    overflow: hidden;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+  }
+  @media (max-width: 768px) {
+    .chat-app { grid-template-columns: 1fr; }
+    .chat-app .chat-contacts { display: none; }
+    .chat-app .chat-contacts.open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      inset: 0;
+      z-index: 1050;
+      width: 100%;
+    }
+  }
+  .chat-contacts {
+    background: var(--bs-tertiary-bg);
+    border-right: 1px solid var(--bs-border-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .chat-contact {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--bs-border-color);
+    text-decoration: none;
+    color: inherit;
+  }
+  .chat-contact:hover { background: var(--bs-body-bg); }
+  .chat-contact.active {
+    background: var(--bs-body-bg);
+    border-left: 3px solid var(--bs-primary);
+    padding-left: calc(1rem - 3px);
+  }
+  .chat-avatar {
+    position: relative;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+  .chat-conversation { display: flex; flex-direction: column; min-height: 0; }
+  .chat-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--bs-body-bg);
+  }
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background: var(--bs-tertiary-bg);
+    display: flex;
+    flex-direction: column;
+  }
+  .chat-message { display: flex; margin-bottom: 0.75rem; }
+  .chat-message.me { justify-content: flex-end; }
+  .chat-bubble {
+    max-width: 70%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+  .chat-message.them .chat-bubble {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-bottom-left-radius: 0.25rem;
+  }
+  .chat-message.me .chat-bubble {
+    background: var(--bs-primary);
+    color: #fff;
+    border-bottom-right-radius: 0.25rem;
+  }
+  .chat-time {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    display: block;
+    margin-top: 0.15rem;
+  }
+  .chat-message.me .chat-time { color: rgba(255, 255, 255, 0.85); }
+  .chat-composer {
+    padding: 0.75rem;
+    border-top: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+  }
+  .chat-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--bs-secondary);
+    text-align: center;
+    padding: 2rem;
+  }
+  .chat-empty i { font-size: 3rem; opacity: 0.2; }
+</style>
+{% endblock %}
+
+{% block content_header %}
+<div class="app-content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3 class="mb-0">Chat</h3>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-end">
+          <li class="breadcrumb-item"><a href="{% url 'core:dashboard' %}">Inicio</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'messaging:inbox' %}">Mensajes</a></li>
+          {% if peer %}
+            <li class="breadcrumb-item active" aria-current="page">{{ peer.nombres }} {{ peer.apellidos }}</li>
+          {% else %}
+            <li class="breadcrumb-item active" aria-current="page">Seleccionar conversación</li>
+          {% endif %}
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="chat-app">
+
+  <aside class="chat-contacts" id="chatContacts">
+    <div class="p-3 border-bottom d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-outline-secondary d-md-none" id="closeContacts" type="button" aria-label="Cerrar">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <h6 class="mb-0 fw-semibold"><i class="bi bi-chat-dots me-2"></i>Conversaciones</h6>
+    </div>
+    <div class="flex-grow-1 overflow-auto">
+      {% if conversations %}
+        {% for c in conversations %}
+          <a href="{% url 'messaging:chat_room' c.pk %}" class="chat-contact {% if peer and c.pk == peer.pk %}active{% endif %}">
+            <span class="chat-avatar bg-primary-subtle text-primary">
+              {{ c.nombres|slice:":1"|upper }}{{ c.apellidos|slice:":1"|upper }}
+            </span>
+            <div class="flex-grow-1 overflow-hidden">
+              <div class="d-flex justify-content-between">
+                <p class="mb-0 text-truncate fw-semibold">{{ c.nombres }} {{ c.apellidos }}</p>
+                <small class="text-secondary flex-shrink-0 ms-2">{{ c.last_message_date|date:"d M" }}</small>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-truncate text-secondary">
+                  {% if c.last_message %}{{ c.last_message|truncatechars:40 }}{% else %}—{% endif %}
+                </small>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        <div class="p-3 text-center text-secondary">
+          <small>No hay conversaciones aún</small>
+        </div>
+      {% endif %}
+    </div>
+  </aside>
+
+  <section class="chat-conversation">
+    {% if peer %}
+      <header class="chat-header">
+        <span class="chat-avatar bg-primary-subtle text-primary">
+          {{ peer.nombres|slice:":1"|upper }}{{ peer.apellidos|slice:":1"|upper }}
+        </span>
+        <div class="flex-grow-1 overflow-hidden">
+          <p class="mb-0 fw-semibold text-truncate">{{ peer.nombres }} {{ peer.apellidos }}</p>
+          <small class="text-secondary text-truncate d-block">{{ peer.email }}</small>
+        </div>
+        <div class="btn-group btn-group-sm d-md-none">
+          <button class="btn btn-outline-secondary" type="button" id="toggleContacts" title="Ver conversaciones">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="chat-messages" id="chatMessages">
+        {% for m in messages %}
+          <div class="chat-message {% if m.remitente == request.user %}me{% else %}them{% endif %}">
+            <div class="chat-bubble">
+              {{ m.descripcion }}
+              <span class="chat-time">{{ m.created_at|date:"H:i" }}</span>
+            </div>
+          </div>
+        {% empty %}
+          <div class="chat-empty" id="chatEmpty">
+            <i class="bi bi-chat-dots"></i>
+            <p class="mt-2 mb-0">Sin mensajes aún. ¡Escribí algo!</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <form class="chat-composer" id="chatComposer" autocomplete="off">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Escribí un mensaje…"
+            aria-label="Escribí un mensaje"
+            id="chatInput"
+            autocomplete="off"
+          />
+          <button class="btn btn-primary" type="submit" id="sendBtn" title="Enviar">
+            <i class="bi bi-send"></i>
+          </button>
+        </div>
+      </form>
+    {% else %}
+      <div class="chat-empty">
+        <i class="bi bi-chat-dots"></i>
+        <p class="mt-2 mb-0">Seleccioná una conversación del panel izquierdo.</p>
+      </div>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+{% if peer %}
+<script>
+(() => {
+  const peerId = {{ peer.pk }};
+  const currentUserId = {{ request.user.pk }};
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = wsProtocol + '//' + window.location.host + '/ws/chat/' + peerId + '/';
+
+  const chatForm = document.getElementById('chatComposer');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const chatMessages = document.getElementById('chatMessages');
+  const contactsEl = document.getElementById('chatContacts');
+  const toggleBtn = document.getElementById('toggleContacts');
+  const closeBtn = document.getElementById('closeContacts');
+
+  function scrollToBottom() {
+    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function escapeHtml(text) {
+    const d = document.createElement('div');
+    d.textContent = text;
+    return d.innerHTML;
+  }
+
+  function fmtTime(iso) {
+    try {
+      return new Date(iso).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function ensureEmptyRemoved() {
+    const empty = chatMessages.querySelector('.chat-empty');
+    if (empty) empty.remove();
+  }
+
+  function appendMessage(data) {
+    ensureEmptyRemoved();
+    const isMine = String(data.sender_id) === String(currentUserId);
+    const wrap = document.createElement('div');
+    wrap.className = 'chat-message ' + (isMine ? 'me' : 'them');
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.innerHTML = escapeHtml(data.message) +
+      '<span class="chat-time">' + fmtTime(data.created_at) + '</span>';
+    wrap.appendChild(bubble);
+    chatMessages.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function loadHistory(messages) {
+    chatMessages.innerHTML = '';
+    if (!messages.length) {
+      const div = document.createElement('div');
+      div.className = 'chat-empty';
+      div.innerHTML = '<i class="bi bi-chat-dots"></i><p class="mt-2 mb-0">Sin mensajes aún. ¡Escribí algo!</p>';
+      chatMessages.appendChild(div);
+      return;
+    }
+    messages.forEach(appendMessage);
+  }
+
+  let socket = null;
+  function connect() {
+    socket = new WebSocket(wsUrl);
+    socket.addEventListener('message', (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'history') {
+        loadHistory(data.messages || []);
+      } else if (data.type === 'message') {
+        appendMessage(data);
+      }
+    });
+    socket.addEventListener('close', () => {
+      setTimeout(connect, 3000);
+    });
+    socket.addEventListener('error', () => { try { socket.close(); } catch (e) {} });
+  }
+
+  function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text || !socket || socket.readyState !== WebSocket.OPEN) return;
+    socket.send(JSON.stringify({ message: text, destinatario_id: peerId }));
+    chatInput.value = '';
+  }
+
+  chatForm.addEventListener('submit', (e) => { e.preventDefault(); sendMessage(); });
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  if (toggleBtn) toggleBtn.addEventListener('click', () => contactsEl.classList.add('open'));
+  if (closeBtn) closeBtn.addEventListener('click', () => contactsEl.classList.remove('open'));
+
+  scrollToBottom();
+  connect();
+})();
+</script>
+{% endif %}
+{% endblock %}

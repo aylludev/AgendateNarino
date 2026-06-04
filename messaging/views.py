@@ -3,16 +3,44 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Q
 from .models import Message
+from usuarios.models import Usuario
 
 
 @login_required
 def inbox(request):
-    messages_list = Message.objects.filter(destinatario=request.user).order_by('-created_at')
-    paginator = Paginator(messages_list, 20)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'messaging/inbox.html', {'page_obj': page_obj})
+    """List conversations for the current user."""
+    from django.db.models import Max
+
+    sent = Message.objects.filter(remitente=request.user).values_list('destinatario_id', flat=True)
+    received = Message.objects.filter(destinatario=request.user).values_list('remitente_id', flat=True)
+    peer_ids = list(set(list(sent) + list(received)))
+
+    conversations = []
+    for pid in peer_ids:
+        last_msg = Message.objects.filter(
+            Q(remitente=request.user, destinatario_id=pid) |
+            Q(destinatario=request.user, remitente_id=pid)
+        ).order_by('-created_at').first()
+
+        unread = Message.objects.filter(
+            remitente_id=pid, destinatario=request.user, leido=False
+        ).count()
+
+        if last_msg:
+            peer = last_msg.destinatario if last_msg.remitente == request.user else last_msg.remitente
+            conversations.append({
+                'pk': peer.pk,
+                'nombres': peer.nombres,
+                'apellidos': peer.apellidos,
+                'last_message': last_msg.descripcion,
+                'last_message_date': last_msg.created_at,
+                'unread': unread,
+            })
+
+    conversations.sort(key=lambda x: x['last_message_date'], reverse=True)
+    return render(request, 'messaging/inbox.html', {'conversations': conversations})
 
 
 @login_required
@@ -49,16 +77,65 @@ def compose(request):
         from usuarios.models import Usuario
         try:
             destinatario = Usuario.objects.get(pk=destinatario_id)
-            Message.objects.create(
+            msg = Message.objects.create(
                 remitente=remitente,
                 destinatario=destinatario,
                 descripcion=descripcion
             )
             messages.success(request, 'Mensaje enviado correctamente.')
-            return redirect('messaging:inbox')
+            return redirect('messaging:chat_room', destinatario_id=destinatario.pk)
         except Usuario.DoesNotExist:
             messages.error(request, 'Destinatario no encontrado.')
 
     from usuarios.models import Usuario
     usuarios = Usuario.objects.filter(is_active=True).exclude(pk=request.user.pk)
     return render(request, 'messaging/compose.html', {'usuarios': usuarios})
+
+
+@login_required
+def chat_room(request, user_id):
+    """Render chat room with a specific user."""
+    peer = get_object_or_404(Usuario, pk=user_id)
+    if peer == request.user:
+        return redirect('messaging:inbox')
+
+    # Get or create room name
+    ids = sorted([request.user.id, peer.id])
+    room_name = f"chat_{ids[0]}_{ids[1]}"
+
+    # Conversations: users we've exchanged messages with
+    sent = Message.objects.filter(remitente=request.user).values_list('destinatario_id', flat=True)
+    received = Message.objects.filter(destinatario=request.user).values_list('remitente_id', flat=True)
+    peer_ids = list(set(list(sent) + list(received)))
+
+    conversations = []
+    for pid in peer_ids:
+        last_msg = Message.objects.filter(
+            Q(remitente=request.user, destinatario_id=pid) |
+            Q(destinatario=request.user, remitente_id=pid)
+        ).order_by('-created_at').first()
+        if last_msg:
+            peer_conv = last_msg.destinatario if last_msg.remitente == request.user else last_msg.remitente
+            if peer_conv.pk != request.user.pk:
+                conversations.append({
+                    'pk': peer_conv.pk,
+                    'nombres': peer_conv.nombres,
+                    'apellidos': peer_conv.apellidos,
+                    'last_message': last_msg.descripcion,
+                    'last_message_date': last_msg.created_at,
+                })
+
+    conversations.sort(key=lambda x: x['last_message_date'], reverse=True)
+
+    # All messages between these two users
+    messages_qs = Message.objects.filter(
+        Q(remitente=request.user, destinatario=peer) |
+        Q(remitente=peer, destinatario=request.user)
+    ).order_by('created_at')
+
+    return render(request, 'messaging/chat.html', {
+        'peer': peer,
+        'room_name': room_name,
+        'conversations': conversations,
+        'messages': messages_qs,
+    })

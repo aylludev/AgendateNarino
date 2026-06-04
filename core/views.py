@@ -18,7 +18,7 @@ def dashboard(request):
     total_eventos = Evento.objects.count()
     eventos_activos = Evento.objects.filter(activo=True).count()
     total_gestores = Evento.objects.values('gestor').distinct().count()
-    mensajes_nuevos = Message.objects.filter(destinatario=request.user).count()
+    mensajes_nuevos = Message.objects.filter(destinatario=request.user, leido=False).count()
 
     # Estados de eventos
     eventos_no_iniciados = Evento.objects.filter(estado='no_iniciado').count()
@@ -105,11 +105,12 @@ def client_dashboard(request):
     total_mis_eventos = mis_eventos.count()
     proximo = mis_eventos.filter(activo=True, fecha__gte=date.today()).first()
     proximo_evento = proximo.fecha.strftime('%d/%m') if proximo else '-'
+    mensajes_nuevos = Message.objects.filter(destinatario=request.user, leido=False).count()
 
     return render(request, 'core/client_dashboard.html', {
         'mis_eventos': mis_eventos,
         'mis_eventos_activos': mis_eventos_activos,
         'total_mis_eventos': total_mis_eventos,
         'proximo_evento': proximo_evento,
-        'mensajes_nuevos': 0,
+        'mensajes_nuevos': mensajes_nuevos,
     })

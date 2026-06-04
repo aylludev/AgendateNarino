@@ -21,6 +21,17 @@ class Message(models.Model):
     descripcion = models.TextField(
         verbose_name='Mensaje'
     )
+    room_identifier = models.CharField(
+        max_length=50,
+        db_index=True,
+        blank=True,
+        default='',
+        verbose_name='Identificador de sala'
+    )
+    leido = models.BooleanField(
+        default=False,
+        verbose_name='¿Leído?'
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Fecha de envío'
@@ -82,5 +93,8 @@ class Calification(models.Model):
             raise ValidationError({'puntuacion': 'La puntuación debe estar entre 1 y 5.'})
 
     def save(self, *args, **kwargs):
+        if not self.room_identifier:
+            ids = sorted([self.remitente_id, self.destinatario_id])
+            self.room_identifier = f"chat_{ids[0]}_{ids[1]}"
         self.clean()
         super().save(*args, **kwargs)

@@ -36,13 +36,6 @@
             <p>Usuarios</p>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="{% url 'messaging:inbox' %}" class="nav-link {% if request.resolver_match.url_name == 'inbox' %}active{% endif %}">
-            <i class="nav-icon bi bi-envelope-fill"></i>
-            <p>Mensajes{% if mensajes_nuevos > 0 %}<span class="badge text-bg-danger ms-2">{{ mensajes_nuevos }}</span>{% endif %}</p>
-          </a>
-        </li>
-
         {% else %}
         {# ===== Menú Gestor ===== #}
         <li class="nav-item">
@@ -64,6 +57,13 @@
           </a>
         </li>
         {% endif %}
+
+        <li class="nav-item">
+          <a href="{% url 'messaging:inbox' %}" class="nav-link {% if request.resolver_match.url_name == 'inbox' or request.resolver_match.url_name == 'chat_room' %}active{% endif %}">
+            <i class="nav-icon bi bi-chat-dots-fill"></i>
+            <p>Mensajes{% if mensajes_nuevos > 0 %}<span class="badge text-bg-danger ms-2">{{ mensajes_nuevos }}</span>{% endif %}</p>
+          </a>
+        </li>
 
       </ul>
     </nav>

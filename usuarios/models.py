@@ -83,11 +83,13 @@ class Usuario(AbstractUser):
         return self.is_staff or self.is_superuser or self.in_group('Moderador')
 
     def save(self, *args, **kwargs):
-        # Sincronizar is_moderador con pertenencia al grupo antes de guardar
-        if self.in_group('Moderador') and not self.is_moderador:
-            self.is_moderador = True
-        elif not self.in_group('Moderador') and self.is_moderador:
-            self.is_moderador = False
+        # Si ya tiene pk, sincronizar is_moderador con pertenencia al grupo
+        # (no se puede consultar la M2M groups antes de tener pk).
+        if self.pk is not None:
+            if self.in_group('Moderador') and not self.is_moderador:
+                self.is_moderador = True
+            elif not self.in_group('Moderador') and self.is_moderador:
+                self.is_moderador = False
         super().save(*args, **kwargs)
 
 

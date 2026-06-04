@@ -14,12 +14,14 @@ DEBUG = config('AGENDATE_DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     # Local apps
     'usuarios',
     'eventos',
@@ -56,6 +58,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'agendate_narino.wsgi.application'
+ASGI_APPLICATION = 'agendate_narino.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
 
 # Database — PostgreSQL via DATABASE_URL env var
 DATABASES = {
