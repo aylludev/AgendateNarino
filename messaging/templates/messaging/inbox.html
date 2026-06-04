@@ -130,12 +130,14 @@
 {% endblock %}
 
 {% block content_header %}
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-  <div>
-    <h1 class="h3 mb-0">Mensajes</h1>
-    <small class="text-secondary">{{ conversations|length }} conversación{{ conversations|length|pluralize:"es" }}</small>
+<div class="d-flex flex-md-nowrap justify-content-between align-items-center gap-3 mb-3">
+  <div class="min-w-0">
+    <h1 class="h3 mb-0 text-truncate">Mensajes</h1>
+    <small class="text-secondary text-truncate d-block">
+      {{ conversations|length }} {% if conversations|length == 1 %}conversación{% else %}conversaciones{% endif %}
+    </small>
   </div>
-  <a href="{% url 'messaging:compose' %}" class="btn btn-primary">
+  <a href="{% url 'messaging:compose' %}" class="btn btn-primary flex-shrink-0 text-nowrap">
     <i class="bi bi-plus-lg me-1"></i>Nuevo mensaje
   </a>
 </div>
