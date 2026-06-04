@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.contrib import messages
+from datetime import date
 from .models import Categoria, Evento, EventoFlyer
 from .forms import CategoriaForm, EventoForm
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
@@ -11,6 +12,41 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 def home(request):
     """Landing page pública (templates/home/index.html)."""
     return render(request, 'home/index.html')
+
+
+def evento_explore(request):
+    """Página pública 'Ver más eventos': carrusel + mapa de localización."""
+    eventos = (
+        Evento.objects
+        .filter(activo=True, fecha__gte=date.today())
+        .select_related('categoria', 'gestor')
+        .prefetch_related('flyers')
+        .order_by('fecha')
+    )
+
+    map_events = []
+    for e in eventos.exclude(geolocalizacion__isnull=True).exclude(geolocalizacion=''):
+        try:
+            lat, lng = e.geolocalizacion.split(',')
+            map_events.append({
+                'id': e.id,
+                'title': e.titulo,
+                'lat': float(lat.strip()),
+                'lng': float(lng.strip()),
+                'category': e.categoria.nombre if e.categoria else 'General',
+                'category_color': e.categoria.color if e.categoria and hasattr(e.categoria, 'color') else '#0d6efd',
+                'date': e.fecha.strftime('%d/%m/%Y'),
+                'municipio': e.municipio,
+                'url': e.get_absolute_url() if hasattr(e, 'get_absolute_url') else f'/events/events/{e.id}/',
+            })
+        except (ValueError, AttributeError):
+            continue
+
+    import json
+    return render(request, 'eventos/evento_explore.html', {
+        'eventos': eventos,
+        'map_events_json': json.dumps(map_events),
+    })
 
 
 def _is_moderador(user):

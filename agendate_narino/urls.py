@@ -5,13 +5,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from eventos.views import home
+from eventos import views as eventos_views
 
 urlpatterns = [
-    path('', home, name='home'),
+    path('', eventos_views.home, name='home'),
     path('admin/', admin.site.urls),
     path('usuarios/', include('usuarios.urls')),
     path('events/', include('eventos.urls')),
+    path('events/explore/', eventos_views.evento_explore, name='evento_explore'),
     path('messaging/', include('messaging.urls')),
     path('core/', include('core.urls')),
 ]
